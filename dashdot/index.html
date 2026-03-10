@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DASHDOT — Morse Code Radio</title>
+  <meta name="description" content="Transmit and receive International Morse Code using your phone's camera flash. Two devices, one language." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── Reset & Base ──────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #000000;
+      --surface:    #0a0a0a;
+      --surface-alt:#111111;
+      --border:     #1a1a1a;
+      --green:      #00FF41;
+      --green-mid:  #00b32d;
+      --green-dim:  #004d13;
+      --green-glow: rgba(0, 255, 65, 0.15);
+      --green-glow2:rgba(0, 255, 65, 0.08);
+      --white:      #ffffff;
+      --gray:       #888888;
+      --gray-dark:  #333333;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Space Mono', monospace;
+      background: var(--bg);
+      color: var(--white);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ─── Scroll fade-in ─────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ─── Nav ────────────────────────────────────────────────── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 56px;
+      background: rgba(0,0,0,0.92);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(8px);
+    }
+
+    .nav-logo {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 10px;
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--gray);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--green); }
+
+    .nav-cta {
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--bg) !important;
+      background: var(--green);
+      padding: 6px 16px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: opacity 0.2s !important;
+    }
+    .nav-cta:hover { opacity: 0.85; }
+
+    /* ─── Hero ───────────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Scanline overlay */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,255,65,0.015) 2px,
+        rgba(0,255,65,0.015) 4px
+      );
+      pointer-events: none;
+    }
+
+    /* Grid background */
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 48px 48px;
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .hero-content { position: relative; z-index: 1; max-width: 800px; }
+
+    /* Morse ticker */
+    .morse-ticker {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 48px;
+      height: 32px;
+    }
+
+    .morse-sym {
+      display: inline-block;
+      background: var(--green);
+      border-radius: 50%;
+      box-shadow: 0 0 12px var(--green), 0 0 24px rgba(0,255,65,0.4);
+    }
+
+    /* Dot */
+    .morse-sym.dot { width: 10px; height: 10px; }
+    /* Dash */
+    .morse-sym.dash { width: 30px; height: 10px; border-radius: 5px; }
+    /* Gap between letters */
+    .morse-sym.gap { width: 16px; height: 0; background: transparent; box-shadow: none; }
+
+    /* Individual symbol blink animations */
+    .morse-sym:nth-child(1)  { animation: mblink 3.2s 0.0s infinite; }
+    .morse-sym:nth-child(2)  { animation: mblink 3.2s 0.2s infinite; }
+    .morse-sym:nth-child(4)  { animation: mblink 3.2s 0.5s infinite; }
+    .morse-sym:nth-child(5)  { animation: mblink 3.2s 0.7s infinite; }
+    .morse-sym:nth-child(6)  { animation: mblink 3.2s 0.9s infinite; }
+    .morse-sym:nth-child(8)  { animation: mblink 3.2s 1.2s infinite; }
+    .morse-sym:nth-child(9)  { animation: mblink 3.2s 1.4s infinite; }
+    .morse-sym:nth-child(10) { animation: mblink 3.2s 1.6s infinite; }
+    .morse-sym:nth-child(12) { animation: mblink 3.2s 1.9s infinite; }
+    .morse-sym:nth-child(13) { animation: mblink 3.2s 2.1s infinite; }
+
+    @keyframes mblink {
+      0%, 15% { opacity: 1; }
+      20%, 80% { opacity: 0.15; }
+      85%, 100% { opacity: 1; }
+    }
+
+    .hero-eyebrow {
+      font-size: 10px;
+      letter-spacing: 6px;
+      color: var(--green);
+      margin-bottom: 20px;
+    }
+
+    .hero-headline {
+      font-size: clamp(36px, 8vw, 72px);
+      font-weight: 700;
+      letter-spacing: clamp(6px, 2vw, 20px);
+      color: var(--white);
+      line-height: 1.1;
+      margin-bottom: 24px;
+    }
+
+    .hero-sub {
+      font-size: clamp(14px, 2vw, 18px);
+      color: var(--gray);
+      letter-spacing: 2px;
+      margin-bottom: 48px;
+      line-height: 1.8;
+    }
+
+    .hero-sub span { color: var(--green); }
+
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 64px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 3px;
+      font-weight: 700;
+      padding: 14px 28px;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--green);
+      color: var(--bg);
+      box-shadow: 0 0 24px rgba(0,255,65,0.3);
+    }
+    .btn-primary:hover {
+      box-shadow: 0 0 40px rgba(0,255,65,0.5);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--green);
+      border: 1px solid var(--green-dim);
+    }
+    .btn-secondary:hover {
+      border-color: var(--green);
+      background: var(--green-glow);
+    }
+
+    /* Terminal cursor */
+    .hero-cursor {
+      font-size: 13px;
+      color: var(--gray-dark);
+      letter-spacing: 4px;
+    }
+    .hero-cursor span {
+      color: var(--green);
+      animation: cursor-blink 1s step-end infinite;
+    }
+    @keyframes cursor-blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* ─── Section shared ─────────────────────────────────────── */
+    section {
+      padding: 100px 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 9px;
+      letter-spacing: 5px;
+      color: var(--green);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: clamp(24px, 4vw, 40px);
+      font-weight: 700;
+      letter-spacing: 6px;
+      color: var(--white);
+      margin-bottom: 16px;
+    }
+
+    .section-sub {
+      font-size: 13px;
+      color: var(--gray);
+      letter-spacing: 1px;
+      line-height: 1.8;
+      max-width: 560px;
+    }
+
+    .divider {
+      width: 40px;
+      height: 2px;
+      background: var(--green-dim);
+      margin: 24px 0;
+    }
+
+    /* ─── TX Section ─────────────────────────────────────────── */
+    #tx {
+      border-top: 1px solid var(--border);
+      padding-top: 100px;
+      padding-bottom: 100px;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+
+    .how-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      margin-top: 60px;
+    }
+
+    /* Phone mockup */
+    .phone {
+      position: relative;
+      width: 200px;
+      height: 360px;
+      background: var(--surface);
+      border-radius: 32px;
+      border: 2px solid var(--border);
+      margin: 0 auto;
+      overflow: hidden;
+      box-shadow: 0 0 60px rgba(0,0,0,0.8);
+    }
+
+    .phone::before {
+      content: '';
+      position: absolute;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+    }
+
+    .phone-screen {
+      position: absolute;
+      inset: 36px 12px 12px;
+      background: var(--bg);
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      overflow: hidden;
+    }
+
+    /* Torch flash animation */
+    .torch-flash {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #ffffff 30%, rgba(255,255,255,0) 70%);
+      animation: torch 2.4s 0.5s infinite;
+      box-shadow: 0 0 0 0 rgba(255,255,255,0);
+    }
+
+    @keyframes torch {
+      0%   { opacity: 0; box-shadow: 0 0 0 0 rgba(255,255,255,0); }
+      5%   { opacity: 1; box-shadow: 0 0 40px 20px rgba(255,255,255,0.3); }
+      15%  { opacity: 0; }
+      20%  { opacity: 1; box-shadow: 0 0 40px 20px rgba(255,255,255,0.3); }
+      28%  { opacity: 0; }
+      60%  { opacity: 1; box-shadow: 0 0 40px 20px rgba(255,255,255,0.3); }
+      75%  { opacity: 1; }
+      85%  { opacity: 0; }
+      100% { opacity: 0; }
+    }
+
+    .phone-label {
+      font-size: 7px;
+      letter-spacing: 3px;
+      color: var(--gray-dark);
+    }
+
+    .phone-text {
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: var(--green);
+    }
+
+    .phone-morse {
+      font-size: 14px;
+      color: var(--green);
+      letter-spacing: 4px;
+      text-shadow: 0 0 8px var(--green);
+    }
+
+    /* Steps list */
+    .steps {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .step {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1px solid var(--green-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      color: var(--green);
+      letter-spacing: 0;
+      margin-top: 2px;
+    }
+
+    .step-body h4 {
+      font-size: 12px;
+      letter-spacing: 3px;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+
+    .step-body p {
+      font-size: 12px;
+      color: var(--gray);
+      letter-spacing: 0.5px;
+      line-height: 1.7;
+    }
+
+    /* ─── RX Section ─────────────────────────────────────────── */
+    #rx {
+      border-top: 1px solid var(--border);
+      padding-top: 100px;
+      padding-bottom: 100px;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+
+    /* Terminal output mockup */
+    .terminal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      font-size: 13px;
+    }
+
+    .terminal-bar {
+      background: var(--surface-alt);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .terminal-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+
+    .terminal-title {
+      font-size: 9px;
+      letter-spacing: 3px;
+      color: var(--gray-dark);
+      margin-left: 8px;
+    }
+
+    .terminal-body {
+      padding: 20px;
+      min-height: 160px;
+      position: relative;
+    }
+
+    .terminal-line {
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: var(--gray-dark);
+      margin-bottom: 4px;
+    }
+
+    .terminal-output {
+      color: var(--green);
+      font-size: 16px;
+      letter-spacing: 2px;
+      line-height: 1.6;
+      margin-top: 12px;
+    }
+
+    .typewriter {
+      overflow: hidden;
+      white-space: nowrap;
+      border-right: 2px solid var(--green);
+      width: 0;
+      animation: type 3s steps(12, end) 1s forwards, cursor-blink 1s step-end 1s infinite;
+    }
+
+    @keyframes type {
+      from { width: 0; }
+      to   { width: 12ch; }
+    }
+
+    .signal-bar-demo {
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .signal-bar-label {
+      font-size: 7px;
+      letter-spacing: 3px;
+      color: var(--gray-dark);
+    }
+
+    .signal-track {
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      position: relative;
+      overflow: visible;
+    }
+
+    .signal-fill {
+      height: 100%;
+      background: var(--green);
+      border-radius: 2px;
+      animation: signal-pulse 2s ease-in-out infinite;
+    }
+
+    .signal-threshold {
+      position: absolute;
+      top: -4px;
+      left: 55%;
+      width: 2px;
+      height: 12px;
+      background: var(--white);
+      border-radius: 1px;
+      opacity: 0.7;
+    }
+
+    @keyframes signal-pulse {
+      0%   { width: 20%; }
+      20%  { width: 80%; }
+      35%  { width: 80%; }
+      50%  { width: 10%; }
+      65%  { width: 85%; }
+      80%  { width: 85%; }
+      100% { width: 20%; }
+    }
+
+    /* ─── Features Grid ──────────────────────────────────────── */
+    #features {
+      border-top: 1px solid var(--border);
+      padding-top: 100px;
+      padding-bottom: 100px;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+
+    .features-header { margin-bottom: 60px; }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .feature-card {
+      background: var(--surface);
+      padding: 32px 28px;
+      transition: background 0.2s;
+      cursor: default;
+    }
+
+    .feature-card:hover {
+      background: var(--surface-alt);
+    }
+
+    .feature-icon {
+      font-size: 20px;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .feature-badge {
+      display: inline-block;
+      font-size: 7px;
+      letter-spacing: 2px;
+      color: var(--green);
+      border: 1px solid var(--green-dim);
+      padding: 2px 8px;
+      border-radius: 2px;
+      margin-bottom: 12px;
+    }
+
+    .feature-title {
+      font-size: 12px;
+      letter-spacing: 3px;
+      color: var(--white);
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .feature-desc {
+      font-size: 11px;
+      color: var(--gray);
+      letter-spacing: 0.5px;
+      line-height: 1.7;
+    }
+
+    /* ─── Morse Reference ────────────────────────────────────── */
+    #reference {
+      border-top: 1px solid var(--border);
+      padding-top: 100px;
+      padding-bottom: 100px;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+
+    .morse-table-wrapper {
+      margin-top: 48px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .morse-table-header {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      background: var(--surface-alt);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 0;
+    }
+
+    .morse-table-header span {
+      font-size: 8px;
+      letter-spacing: 3px;
+      color: var(--gray-dark);
+      text-align: center;
+    }
+
+    .morse-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 1px;
+      background: var(--border);
+    }
+
+    .morse-cell {
+      background: var(--surface);
+      padding: 14px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s;
+      cursor: default;
+    }
+
+    .morse-cell:hover {
+      background: var(--green-glow2);
+    }
+
+    .morse-cell:hover .morse-cell-char { color: var(--green); text-shadow: 0 0 8px var(--green); }
+    .morse-cell:hover .morse-cell-code { color: var(--green); }
+
+    .morse-cell-char {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 2px;
+      transition: color 0.15s, text-shadow 0.15s;
+    }
+
+    .morse-cell-code {
+      font-size: 11px;
+      color: var(--gray);
+      letter-spacing: 2px;
+      transition: color 0.15s;
+    }
+
+    /* ─── Timing ──────────────────────────────────────────────── */
+    .timing-row {
+      display: flex;
+      gap: 1px;
+      margin-top: 48px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .timing-cell {
+      flex: 1;
+      background: var(--surface);
+      padding: 24px 20px;
+      text-align: center;
+    }
+
+    .timing-value {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--green);
+      text-shadow: 0 0 12px rgba(0,255,65,0.4);
+      margin-bottom: 6px;
+    }
+
+    .timing-label {
+      font-size: 8px;
+      letter-spacing: 2px;
+      color: var(--gray-dark);
+    }
+
+    /* ─── Tech Stack ─────────────────────────────────────────── */
+    #stack {
+      border-top: 1px solid var(--border);
+      padding-top: 80px;
+      padding-bottom: 80px;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding-left: 24px;
+      padding-right: 24px;
+      text-align: center;
+    }
+
+    .stack-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 40px;
+    }
+
+    .stack-pill {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--gray);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 8px 16px;
+      border-radius: 4px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .stack-pill:hover {
+      border-color: var(--green-dim);
+      color: var(--green);
+    }
+
+    .stack-pill span { color: var(--green-mid); }
+
+    /* ─── Footer ─────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 24px;
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 10px;
+      color: var(--white);
+      margin-bottom: 16px;
+    }
+
+    .footer-meta {
+      font-size: 9px;
+      letter-spacing: 3px;
+      color: var(--gray-dark);
+      line-height: 2;
+    }
+
+    .footer-meta a {
+      color: var(--gray);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-meta a:hover { color: var(--green); }
+
+    /* ─── Responsive ─────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-links .nav-hide { display: none; }
+
+      .how-grid {
+        grid-template-columns: 1fr;
+        gap: 48px;
+      }
+
+      .how-grid.reverse { direction: ltr; }
+      .how-grid.reverse .phone-wrap { order: -1; }
+
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .morse-grid { grid-template-columns: repeat(4, 1fr); }
+      .morse-table-header { grid-template-columns: repeat(4, 1fr); }
+      .morse-table-header span:nth-child(5),
+      .morse-table-header span:nth-child(6) { display: none; }
+
+      .timing-row { flex-wrap: wrap; }
+      .timing-cell { flex: 1 1 40%; }
+    }
+
+    @media (max-width: 480px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+      .morse-grid { grid-template-columns: repeat(3, 1fr); }
+      .morse-table-header { grid-template-columns: repeat(3, 1fr); }
+      .morse-table-header span:nth-child(4),
+      .morse-table-header span:nth-child(5),
+      .morse-table-header span:nth-child(6) { display: none; }
+      .hero-buttons { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── Nav ──────────────────────────────────────────────── -->
+  <nav>
+    <a href="#" class="nav-logo">DASHDOT</a>
+    <div class="nav-links">
+      <a href="#tx" class="nav-hide">TX</a>
+      <a href="#rx" class="nav-hide">RX</a>
+      <a href="#reference" class="nav-hide">REFERENCE</a>
+      <a href="https://github.com" class="nav-cta">GET APP</a>
+    </div>
+  </nav>
+
+  <!-- ─── Hero ─────────────────────────────────────────────── -->
+  <div class="hero">
+    <div class="hero-content">
+
+      <!-- Morse animation: D A S H D O T  → -.. .- ... .... -.. --- - -->
+      <div class="morse-ticker" aria-hidden="true">
+        <!-- D: -.. -->
+        <span class="morse-sym dash"></span>
+        <span class="morse-sym dot"></span>
+        <span class="morse-sym dot"></span>
+        <span class="morse-sym gap"></span>
+        <!-- A: .- -->
+        <span class="morse-sym dot"></span>
+        <span class="morse-sym dash"></span>
+        <span class="morse-sym gap"></span>
+        <!-- S: ... -->
+        <span class="morse-sym dot"></span>
+        <span class="morse-sym dot"></span>
+        <span class="morse-sym dot"></span>
+      </div>
+
+      <p class="hero-eyebrow">INTERNATIONAL MORSE CODE</p>
+      <h1 class="hero-headline">MORSE CODE<br>RADIO</h1>
+      <p class="hero-sub">
+        Transmit messages as <span>flashes of light</span>.<br>
+        Receive and decode them in <span>real time</span>.<br>
+        Two devices, one language.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="#tx" class="btn btn-primary">● &nbsp; TX MODE</a>
+        <a href="#rx" class="btn btn-secondary">◉ &nbsp; RX MODE</a>
+      </div>
+
+      <p class="hero-cursor">· · · &nbsp; OPEN SOURCE &nbsp; · · · &nbsp;<span>▋</span></p>
+    </div>
+  </div>
+
+  <!-- ─── TX Section ────────────────────────────────────────── -->
+  <section id="tx" class="reveal">
+    <p class="section-label">01 &nbsp;/&nbsp; TRANSMIT</p>
+    <h2 class="section-title">SEND WITH LIGHT</h2>
+    <div class="divider"></div>
+    <p class="section-sub">Your camera flash becomes a Morse code transmitter. Every dot and dash pulses in sync with the vibration motor.</p>
+
+    <div class="how-grid">
+      <div class="phone-wrap">
+        <div class="phone">
+          <div class="phone-screen">
+            <div class="torch-flash"></div>
+            <div class="phone-text">TRANSMITTING</div>
+            <div class="phone-morse">— · ·</div>
+            <div class="phone-label">CAMERA FLASH</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <ol class="steps">
+          <li class="step">
+            <div class="step-num">01</div>
+            <div class="step-body">
+              <h4>TYPE YOUR MESSAGE</h4>
+              <p>Enter any text using A–Z and 0–9. A live Morse preview scrolls below your input.</p>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step-num">02</div>
+            <div class="step-body">
+              <h4>SET TRANSMISSION SPEED</h4>
+              <p>Drag the speed slider from 60 ms (fast, ~20 WPM) to 200 ms (slow, ~6 WPM). Match your receiver's setting.</p>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step-num">03</div>
+            <div class="step-body">
+              <h4>PRESS TRANSMIT</h4>
+              <p>The camera flash pulses each dot and dash. The vibration motor syncs perfectly with every signal. Tap STOP to cancel instantly.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── RX Section ────────────────────────────────────────── -->
+  <section id="rx" class="reveal">
+    <p class="section-label">02 &nbsp;/&nbsp; RECEIVE</p>
+    <h2 class="section-title">READ WITH THE CAMERA</h2>
+    <div class="divider"></div>
+    <p class="section-sub">Point your camera at the sender's flash. DashDot samples brightness ~12 times per second and decodes the pattern in real time.</p>
+
+    <div class="how-grid reverse">
+      <div>
+        <ol class="steps">
+          <li class="step">
+            <div class="step-num">01</div>
+            <div class="step-body">
+              <h4>OPEN RX MODE</h4>
+              <p>Tap RX ▶ in the top-right corner of the main screen.</p>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step-num">02</div>
+            <div class="step-body">
+              <h4>CALIBRATE</h4>
+              <p>Cover the camera (SAMPLE DARK), then point at the sender's torch (SAMPLE BRIGHT). DashDot sets the detection threshold automatically.</p>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step-num">03</div>
+            <div class="step-body">
+              <h4>PRESS RECEIVE</h4>
+              <p>Decoded text appears letter by letter as the sender transmits. A blinking cursor shows the receiver is live.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <div class="phone-wrap">
+        <div class="terminal">
+          <div class="terminal-bar">
+            <div class="terminal-dot"></div>
+            <div class="terminal-dot"></div>
+            <div class="terminal-dot"></div>
+            <span class="terminal-title">RECEIVER MK.1</span>
+          </div>
+          <div class="terminal-body">
+            <div class="terminal-line">● LIVE &nbsp;&nbsp; SIGNAL ON</div>
+            <div class="terminal-output typewriter">HELLO WORLD</div>
+            <div class="signal-bar-demo">
+              <div class="signal-bar-label">SIGNAL LEVEL</div>
+              <div class="signal-track">
+                <div class="signal-fill"></div>
+                <div class="signal-threshold"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Features ─────────────────────────────────────────── -->
+  <section id="features" class="reveal">
+    <div class="features-header">
+      <p class="section-label">03 &nbsp;/&nbsp; FEATURES</p>
+      <h2 class="section-title">EVERYTHING YOU NEED</h2>
+      <div class="divider"></div>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <span class="feature-icon">⚡</span>
+        <span class="feature-badge">TX</span>
+        <div class="feature-title">FLASH TRANSMISSION</div>
+        <div class="feature-desc">Camera torch pulses International Morse Code with precise 1:3:7 timing. Up to 20 WPM at maximum speed.</div>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">〰</span>
+        <span class="feature-badge">TX</span>
+        <div class="feature-title">VIBRATION SYNC</div>
+        <div class="feature-desc">The haptic motor mirrors every dot and dash in exact synchrony with the flash — signal you can feel.</div>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">▤</span>
+        <span class="feature-badge">TX</span>
+        <div class="feature-title">LIVE PREVIEW</div>
+        <div class="feature-desc">Scroll through the full Morse pattern of your message before transmitting. Active character glows in real time.</div>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">◉</span>
+        <span class="feature-badge">RX</span>
+        <div class="feature-title">CAMERA DECODING</div>
+        <div class="feature-desc">Samples camera brightness 12× per second via a low-quality JPEG heuristic. No pixel decoding, no latency.</div>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">◈</span>
+        <span class="feature-badge">RX</span>
+        <div class="feature-title">TWO-STEP CALIBRATION</div>
+        <div class="feature-desc">Dark baseline + bright baseline → midpoint threshold. Works across any device, any lighting environment.</div>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">≡</span>
+        <span class="feature-badge">APP</span>
+        <div class="feature-title">IN-APP GUIDE</div>
+        <div class="feature-desc">Swipeable 6-slide tutorial covering TX and RX. Always accessible via the ? button — no internet required.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Timing ────────────────────────────────────────────── -->
+  <section class="reveal" style="padding-top:0;">
+    <p class="section-label">THE STANDARD</p>
+    <h2 class="section-title">1 : 3 : 7 RATIO</h2>
+    <div class="divider"></div>
+    <p class="section-sub">DashDot follows the ITU international Morse code timing standard exactly.</p>
+
+    <div class="timing-row">
+      <div class="timing-cell">
+        <div class="timing-value">1×</div>
+        <div class="timing-label">DOT</div>
+      </div>
+      <div class="timing-cell">
+        <div class="timing-value">3×</div>
+        <div class="timing-label">DASH</div>
+      </div>
+      <div class="timing-cell">
+        <div class="timing-value">1×</div>
+        <div class="timing-label">ELEMENT GAP</div>
+      </div>
+      <div class="timing-cell">
+        <div class="timing-value">3×</div>
+        <div class="timing-label">LETTER GAP</div>
+      </div>
+      <div class="timing-cell">
+        <div class="timing-value">7×</div>
+        <div class="timing-label">WORD GAP</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Morse Reference ───────────────────────────────────── -->
+  <section id="reference" class="reveal">
+    <p class="section-label">04 &nbsp;/&nbsp; REFERENCE</p>
+    <h2 class="section-title">MORSE CODE TABLE</h2>
+    <div class="divider"></div>
+    <p class="section-sub">All 36 characters supported by DashDot. Hover to highlight.</p>
+
+    <div class="morse-table-wrapper">
+      <div class="morse-table-header">
+        <span>CHAR</span><span>CODE</span><span>CHAR</span><span>CODE</span><span>CHAR</span><span>CODE</span>
+      </div>
+      <div class="morse-grid">
+        <!-- Row 1 -->
+        <div class="morse-cell"><span class="morse-cell-char">A</span><span class="morse-cell-code">· —</span></div>
+        <div class="morse-cell"><span class="morse-cell-char">B</span><span class="morse-cell-code">— · · ·</span></div>
+        <div class="morse-cell"><span class="morse-cell-char">C</span><span class="morse-cell-code">— · — ·</span></div>
+        <div class="morse-cell"><span class="morse-cell-char">D</span><span class="morse-cell-code">— · ·</span></div>
+        <div class="morse-cell"><span class="morse-cell-char">E</span><span class="morse-cell-code">·</span></div>
+        <div class="morse-cell"><span class="morse-cell-char">F</span><span class="morse-cell-code">· · — ·</span></div>
+        <!-- Row 2 -->
+        <div class="morse-cell"><span class="morse-cell-char">G</span><span class="morse-cell-code">— — ·</span></div>
+        <div class="morse-cell"><span class="morse-cell-char">H</span><span class="morse-cell-code">· · · ·</span></div>
+        <div class="morse-cell"><span class="morse-cell-char">I</span><span class="morse-cell-code">· ·</span></div>
+        <div class="morse-cell"><span class="morse-cell-char">J</span><span class="morse-cell-code">· — — —</span></div>
+        <div class="morse-cell"><span class="morse-cell-char">K</span><span class="morse-cell-code">— · —</span></div>
+        <div class="morse-cell"><span class="morse-cell-char">L</span><span class="morse-cell-code">· — · ·</span></div>
+        <!-- Row 3 -->
+        <div class="morse-cell"><span class="morse-cell-char">M</span><span class="morse-cell-code">— —</span></div>
+        <div class="morse-cell"><span class="morse-cell-char">N</span><span class="morse-cell-code">— ·</span></div>
+        <div class="morse-cell"><span class="morse-cell-char">O</span><span class="morse-cell-code">— — —</span></div>
+        <div class="morse-cell"><span class="morse-cell-char">P</span><span class="morse-cell-code">· — — ·</span></div>
+        <div class="morse-cell"><span class="morse-cell-char">Q</span><span class="morse-cell-code">— — · —</span></div>
+        <div class="morse-cell"><span class="morse-cell-char">R</span><span class="morse-cell-code">· — ·</span></div>
+        <!-- Row 4 -->
+        <div class="morse-cell"><span class="morse-cell-char">S</span><span class="morse-cell-code">· · ·</span></div>
+        <div class="morse-cell"><span class="morse-cell-char">T</span><span class="morse-cell-code">—</span></div>
+        <div class="morse-cell"><span class="morse-cell-char">U</span><span class="morse-cell-code">· · —</span></div>
+        <div class="morse-cell"><span class="morse-cell-char">V</span><span class="morse-cell-code">· · · —</span></div>
+        <div class="morse-cell"><span class="morse-cell-char">W</span><span class="morse-cell-code">· — —</span></div>
+        <div class="morse-cell"><span class="morse-cell-char">X</span><span class="morse-cell-code">— · · —</span></div>
+        <!-- Row 5 -->
+        <div class="morse-cell"><span class="morse-cell-char">Y</span><span class="morse-cell-code">— · — —</span></div>
+        <div class="morse-cell"><span class="morse-cell-char">Z</span><span class="morse-cell-code">— — · ·</span></div>
+        <div class="morse-cell"><span class="morse-cell-char">0</span><span class="morse-cell-code">— — — — —</span></div>
+        <div class="morse-cell"><span class="morse-cell-char">1</span><span class="morse-cell-code">· — — — —</span></div>
+        <div class="morse-cell"><span class="morse-cell-char">2</span><span class="morse-cell-code">· · — — —</span></div>
+        <div class="morse-cell"><span class="morse-cell-char">3</span><span class="morse-cell-code">· · · — —</span></div>
+        <!-- Row 6 -->
+        <div class="morse-cell"><span class="morse-cell-char">4</span><span class="morse-cell-code">· · · · —</span></div>
+        <div class="morse-cell"><span class="morse-cell-char">5</span><span class="morse-cell-code">· · · · ·</span></div>
+        <div class="morse-cell"><span class="morse-cell-char">6</span><span class="morse-cell-code">— · · · ·</span></div>
+        <div class="morse-cell"><span class="morse-cell-char">7</span><span class="morse-cell-code">— — · · ·</span></div>
+        <div class="morse-cell"><span class="morse-cell-char">8</span><span class="morse-cell-code">— — — · ·</span></div>
+        <div class="morse-cell"><span class="morse-cell-char">9</span><span class="morse-cell-code">— — — — ·</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Tech Stack ────────────────────────────────────────── -->
+  <section id="stack" class="reveal">
+    <p class="section-label">05 &nbsp;/&nbsp; BUILT WITH</p>
+    <h2 class="section-title">TECH STACK</h2>
+    <div class="divider" style="margin: 24px auto;"></div>
+    <p class="section-sub" style="margin: 0 auto 0;">Pure JavaScript. Zero TypeScript. Minimal dependencies. Production-grade.</p>
+    <div class="stack-pills">
+      <span class="stack-pill">Expo <span>54.0.33</span></span>
+      <span class="stack-pill">React Native <span>0.81.5</span></span>
+      <span class="stack-pill">expo-camera <span>17.0.10</span></span>
+      <span class="stack-pill">expo-haptics <span>15.0.8</span></span>
+      <span class="stack-pill">Zustand <span>4.5.7</span></span>
+      <span class="stack-pill">React Navigation <span>7.x</span></span>
+      <span class="stack-pill">NativeWind <span>4.1.23</span></span>
+      <span class="stack-pill">Space Mono <span>font</span></span>
+    </div>
+  </section>
+
+  <!-- ─── Footer ────────────────────────────────────────────── -->
+  <footer>
+    <div class="footer-logo">DASHDOT</div>
+    <div class="footer-meta">
+      · · · &nbsp; MIT LICENSE &nbsp; · · · &nbsp; 2026 &nbsp; · · ·<br>
+      <a href="mailto:dashdot@delmo.net">dashdot@delmo.net</a>
+      &nbsp;·&nbsp;
+      <a href="https://github.com">GitHub</a>
+    </div>
+  </footer>
+
+  <!-- ─── Scroll reveal ─────────────────────────────────────── -->
+  <script>
+    (function () {
+      var els = document.querySelectorAll('.reveal');
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            io.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      els.forEach(function (el) { io.observe(el); });
+    })();
+  </script>
+
+</body>
+</html>
