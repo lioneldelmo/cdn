@@ -49,8 +49,19 @@ Concert Light Sync was built for one purpose: making live music more immersive. 
 - Exponential moving average smoothing (α=0.3) prevents jitter
 - Graceful fallback to ambient level 0.25 if mic permission is denied
 
+### Navigation & Screens
+- **Hamburger drawer** — Slides in from the left via a Reanimated spring; links to About, Tutorials, Privacy Policy, and Share
+- **About screen** — App info with logo, version, developer, website, and support email
+- **Privacy Policy screen** — WebView loading CDN-hosted HTML with loading indicator and error/retry state
+- **Tutorials screen** — Scrollable glassmorphism cards covering every feature
+
+### Battery & Brightness
+- **Auto max brightness** — Sets screen to 100% when the app is active; silently restores the user's original brightness when backgrounded or closed
+- **Low battery warning** — Amber banner with `FadeInDown` animation appears at ≤10% battery; suppressed on simulators (returns −1)
+
 ### UX & Safety
 - Glassmorphism dark UI (#121212 base) designed for dark venues
+- Safe area aware — header and UI respect Dynamic Island / notch via `useSafeAreaInsets`
 - WCAG-compliant text contrast for readability under stage lights
 - Photosensitivity warning modal before Strobe mode activates
 - Haptic feedback on mode changes, color selection, and brightness notches
@@ -71,6 +82,11 @@ Concert Light Sync was built for one purpose: making live music more immersive. 
 | Haptics | expo-haptics | ~15.0.8 |
 | Gradients | expo-linear-gradient | ~15.0.8 |
 | Worklets | react-native-worklets | ^0.5.1 |
+| Navigation | @react-navigation/native-stack | ^7.14.4 |
+| WebView | react-native-webview | 13.15.0 |
+| Safe Area | react-native-safe-area-context | ~5.6.0 |
+| Brightness | expo-brightness | SDK 54 |
+| Battery | expo-battery | SDK 54 |
 
 ---
 
@@ -78,19 +94,26 @@ Concert Light Sync was built for one purpose: making live music more immersive. 
 
 ```
 concert-light-sync/
-├── App.js                   # Root component — state, gestures, lifecycle
-├── index.js                 # Expo entry point
+├── App.js                      # Root — NavigationContainer + MainScreen
+├── index.js                    # Expo entry point
 ├── package.json
-├── app.json                 # Expo config (permissions, icons, orientation)
-├── babel.config.js          # Babel preset for Expo + Reanimated plugin
-├── metro.config.js          # Metro bundler config
-├── index.html               # Static marketing landing page
-├── CLAUDE.md                # Original design specification
-└── components/
-    ├── LightCanvas.js       # Reanimated rendering engine (all 6 modes)
-    ├── ControlPanel.js      # Bento grid UI, mode selection, color/brightness
-    ├── ColorWheel.js        # HSV color picker with presets and haptics
-    └── AudioReactivity.js   # Microphone polling and signal smoothing
+├── app.json                    # Expo config (permissions, icons, orientation)
+├── babel.config.js             # Babel preset for Expo + Reanimated plugin
+├── metro.config.js             # Metro bundler config
+├── index.html                  # Static marketing landing page
+├── CLAUDE.md                   # Original design specification
+├── components/
+│   ├── LightCanvas.js          # Reanimated rendering engine (all 6 modes)
+│   ├── ControlPanel.js         # Bento grid UI, mode selection, color/brightness
+│   ├── ColorWheel.js           # HSV color picker with presets and haptics
+│   ├── AudioReactivity.js      # Microphone polling and signal smoothing
+│   ├── AppHeader.js            # Brand header with hamburger button (safe area aware)
+│   ├── SideDrawer.js           # Sliding navigation drawer (Reanimated spring)
+│   └── AdBanner.js             # AdMob banner (bottom of screen)
+└── screens/
+    ├── AboutScreen.js          # App info — version, developer, links
+    ├── PrivacyPolicyScreen.js  # WebView loading CDN-hosted privacy policy HTML
+    └── TutorialsScreen.js      # Scrollable feature guide
 ```
 
 ### Component Responsibilities
@@ -104,6 +127,10 @@ concert-light-sync/
 **`ColorWheel.js`** — HSV color picker. Two `PanResponder` handlers drive the hue and brightness sliders. Fires haptic feedback at primary hue nodes (0°, 60°, 120°, 180°, 240°, 300°). Converts HSV → Hex for the rest of the app.
 
 **`AudioReactivity.js`** — Invisible component (returns `null`). Requests mic permission, starts `expo-audio` recording with metering enabled, and polls every 50ms. Writes the smoothed audio level to `audioLevelRef` — a ref, not state, so it never triggers re-renders.
+
+**`AppHeader.js`** — Brand header rendered only when the control panel is visible. Uses `useSafeAreaInsets` to pad the Dynamic Island / notch. Returns `null` when hidden, contributing zero height to the layout.
+
+**`SideDrawer.js`** — Custom drawer animated with `useSharedValue` + `withSpring`. Opened exclusively via the hamburger button (no edge swipe) to avoid conflicting with the existing `Gesture.Pan()` mode-change gesture. Overlay `pointerEvents` blocks click-through to the canvas when open.
 
 ---
 
