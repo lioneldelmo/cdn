@@ -9,4 +9,5 @@
   { id: 'shine',   label: 'Shine',   glyph: '✨' },
   { id: 'wave',    label: 'Wave',    glyph: '〰' },
   { id: 'mic',     label: 'Mic',     glyph: '🎤' },
+  { id: 'yinyang', label: 'Yin Yang', glyph: '☯' },
 ]
