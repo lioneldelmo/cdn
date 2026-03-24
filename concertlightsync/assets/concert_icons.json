@@ -1,0 +1,12 @@
+[
+  { id: 'heart',   label: 'Heart',   glyph: '♥' },
+  { id: 'music',   label: 'Music',   glyph: '♪' },
+  { id: 'notes',   label: 'Notes',   glyph: '♫' },
+  { id: 'star2',   label: 'Glow',    glyph: '★' },
+  { id: 'sparkle', label: 'Sparkle', glyph: '✦' },
+  { id: 'fire',    label: 'Fire',    glyph: '🔥' },
+  { id: 'purple',  label: 'Purple',  glyph: '💜' },
+  { id: 'shine',   label: 'Shine',   glyph: '✨' },
+  { id: 'wave',    label: 'Wave',    glyph: '〰' },
+  { id: 'mic',     label: 'Mic',     glyph: '🎤' },
+]
