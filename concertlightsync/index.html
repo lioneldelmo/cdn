@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Concert Light Sync — Turn Your Phone Into a Concert Light</title>
-  <meta name="description" content="Transform your smartphone into a real-time concert light controller. 6 stunning modes, audio-reactive effects, gesture controls. Built for concert-goers." />
+  <meta name="description" content="Transform your smartphone into a real-time concert light controller. 9 stunning modes, audio-reactive effects, gesture controls. Built for concert-goers." />
   <style>
     /* ─── CSS Custom Properties ───────────────────────────────── */
     :root {
@@ -478,6 +478,69 @@
       50%      { opacity: 0; }
     }
 
+    /* ── K-pop preview ── */
+    .preview-kpop {
+      background: #0a0018;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 4px;
+      padding: 0 20px 16px;
+    }
+    .kpop-bar {
+      width: 10px;
+      border-radius: 3px 3px 0 0;
+      animation: kpopAnim var(--dur) ease-in-out infinite alternate;
+    }
+    @keyframes kpopAnim {
+      0%   { height: 6px; }
+      100% { height: var(--h); }
+    }
+
+    /* ── Light Stick preview ── */
+    .preview-lightstick {
+      background: #050510;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .lightstick-body {
+      width: 18px;
+      height: 90px;
+      border-radius: 9px;
+      background: linear-gradient(to bottom, #fff 0%, #a0c8ff 40%, #3a80ff 100%);
+      box-shadow: 0 0 20px 8px rgba(100,160,255,0.6), 0 0 60px 20px rgba(80,120,255,0.3);
+      animation: stickPulse 1.6s ease-in-out infinite alternate;
+    }
+    @keyframes stickPulse {
+      0%   { box-shadow: 0 0 16px 6px rgba(100,160,255,0.5), 0 0 50px 16px rgba(80,120,255,0.2); }
+      100% { box-shadow: 0 0 32px 14px rgba(160,200,255,0.85), 0 0 80px 28px rgba(120,160,255,0.45); }
+    }
+
+    /* ── ORB preview ── */
+    .preview-orb {
+      background: #080010;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .orb-core {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 38% 38%, #e0aaff 0%, #9B30FF 45%, #3d0080 100%);
+      box-shadow: 0 0 30px 12px rgba(155,48,255,0.55), 0 0 70px 24px rgba(100,0,200,0.3);
+      animation: orbBreath 2.4s ease-in-out infinite alternate;
+    }
+    @keyframes orbBreath {
+      0%   { transform: scale(0.85); box-shadow: 0 0 20px 8px rgba(155,48,255,0.4), 0 0 50px 16px rgba(100,0,200,0.2); }
+      100% { transform: scale(1.15); box-shadow: 0 0 40px 18px rgba(180,80,255,0.7), 0 0 90px 32px rgba(130,0,255,0.4); }
+    }
+
     /* ═══════════════════════════════════════════════════════════
        FEATURES
     ═══════════════════════════════════════════════════════════ */
@@ -820,14 +883,14 @@
     <div class="grid-lines"></div>
 
     <div class="hero-content">
-      <div class="hero-eyebrow">React Native · Expo SDK 54 · v1.0</div>
+      <div class="hero-eyebrow">React Native · Expo SDK 54 · v1.0.2</div>
       <h1 class="hero-title">
         Turn Your Phone Into<br>
         a <span class="highlight">Concert Light</span>
       </h1>
       <p class="hero-sub">
         Audio-reactive lighting modes that pulse with the beat. Gesture controls
-        built for dark crowds. Six stunning effects at your fingertips.
+        built for dark crowds. Nine stunning effects at your fingertips.
       </p>
       <div class="hero-cta">
         <a href="#modes" class="btn btn-primary">
@@ -857,7 +920,7 @@
   <section id="modes">
     <div class="container">
       <div class="reveal">
-        <span class="section-label">6 Lighting Modes</span>
+        <span class="section-label">9 Lighting Modes</span>
         <h2 class="section-title">Every vibe,<br>perfectly captured</h2>
         <p class="section-sub">From laser-sharp strobes to flowing rainbows — pick your moment and let your phone become part of the show.</p>
       </div>
@@ -923,6 +986,37 @@
             <div class="mode-name">🌈 Rainbow</div>
             <div class="mode-desc">Six concentric arcs pulsing through the full spectrum. The ultimate festival finale effect.</div>
             <span class="mode-tag tag-visual">5s Cycle</span>
+          </div>
+        </div>
+
+        <div class="mode-card reveal">
+          <div class="mode-preview preview-kpop" id="kpopPreview"></div>
+          <div class="mode-info">
+            <div class="mode-name">🎤 K-pop</div>
+            <div class="mode-desc">Animated wave pattern tuned to fan chants and idol ballads. Crowd-synced energy for the ultimate fan experience.</div>
+            <span class="mode-tag tag-audio">Audio Reactive</span>
+          </div>
+        </div>
+
+        <div class="mode-card reveal">
+          <div class="mode-preview preview-lightstick">
+            <div class="lightstick-body"></div>
+          </div>
+          <div class="mode-info">
+            <div class="mode-name">🪄 Light Stick</div>
+            <div class="mode-desc">An interactive glowing stick that pulses and brightens in real time with the audio around you.</div>
+            <span class="mode-tag tag-audio">Audio Reactive</span>
+          </div>
+        </div>
+
+        <div class="mode-card reveal">
+          <div class="mode-preview preview-orb">
+            <div class="orb-core"></div>
+          </div>
+          <div class="mode-info">
+            <div class="mode-name">🔮 ORB</div>
+            <div class="mode-desc">A pulsing orb that breathes and expands with the beat — hypnotic, immersive, and impossible to ignore.</div>
+            <span class="mode-tag tag-audio">Audio Reactive</span>
           </div>
         </div>
 
@@ -1152,7 +1246,7 @@
       <a href="README.md">Documentation</a>
     </div>
     <div class="footer-bottom">
-      v1.0.0 &nbsp;·&nbsp; MIT License &nbsp;·&nbsp; Made with React Native &amp; Expo
+      v1.0.2 &nbsp;·&nbsp; MIT License &nbsp;·&nbsp; Made with React Native &amp; Expo
     </div>
   </footer>
 
@@ -1201,14 +1295,31 @@
       wavePreview.appendChild(bar);
     }
 
+    // Generate K-pop preview bars (16 bars in pink/purple palette)
+    const kpopPreview = document.getElementById('kpopPreview');
+    if (kpopPreview) {
+      const kpopColors = ['#FF00AA','#FF44BB','#CC00FF','#9900FF','#FF00AA','#FF66CC','#BB00FF','#FF44BB','#9900CC','#FF00AA','#CC44FF','#FF00CC','#8800EE','#FF55BB','#AA00FF','#FF22AA'];
+      const kpopHeights = [40,70,100,130,110,80,120,140,90,60,115,95,75,105,85,55];
+      const kpopDurs = [0.55,0.7,0.5,0.8,0.65,0.6,0.75,0.5,0.7,0.6,0.8,0.55,0.65,0.7,0.5,0.6];
+      kpopHeights.forEach((h, i) => {
+        const bar = document.createElement('div');
+        bar.className = 'kpop-bar';
+        bar.style.cssText = `--h:${h}px; --dur:${kpopDurs[i]}s; background:${kpopColors[i]}; animation-delay:${(i * 0.06).toFixed(2)}s;`;
+        kpopPreview.appendChild(bar);
+      });
+    }
+
     // Phone mockup cycling
     const modes = [
-      { label: 'Candle Mode',  bg: '#000' },
-      { label: 'Meter Mode',   bg: 'linear-gradient(to top, #00FF88 0%, #FFD700 50%, #FF3333 100%)' },
-      { label: 'Pulse Mode',   bg: '#FF3366' },
-      { label: 'Rainbow Mode', bg: 'conic-gradient(from 0deg,#FF0000,#FFD700,#00FF88,#00E5FF,#9B30FF,#FF0000)' },
-      { label: 'Wave Mode',    bg: '#1a0a00' },
-      { label: 'Strobe Mode',  bg: '#f5f5ff' },
+      { label: 'Candle Mode',      bg: '#000' },
+      { label: 'Meter Mode',       bg: 'linear-gradient(to top, #00FF88 0%, #FFD700 50%, #FF3333 100%)' },
+      { label: 'Pulse Mode',       bg: '#FF3366' },
+      { label: 'Rainbow Mode',     bg: 'conic-gradient(from 0deg,#FF0000,#FFD700,#00FF88,#00E5FF,#9B30FF,#FF0000)' },
+      { label: 'Wave Mode',        bg: '#1a0a00' },
+      { label: 'Strobe Mode',      bg: '#f5f5ff' },
+      { label: 'K-pop Mode',       bg: 'linear-gradient(135deg,#1a0030,#3d0080,#6600cc)' },
+      { label: 'Light Stick Mode', bg: 'radial-gradient(circle at 50% 40%, #a0c8ff 0%, #1a3a7a 60%, #050510 100%)' },
+      { label: 'ORB Mode',         bg: 'radial-gradient(circle at 50% 50%, #e0aaff 0%, #6600cc 45%, #080010 100%)' },
     ];
     let modeIdx = 0;
     const phoneScreen = document.getElementById('phoneScreen');

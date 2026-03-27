@@ -1,6 +1,6 @@
 # Concert Light Sync
 
-![Version](https://img.shields.io/badge/version-1.0.0-FF6B00?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.2-FF6B00?style=flat-square)
 ![Platform](https://img.shields.io/badge/platform-iOS%20%7C%20Android-blue?style=flat-square)
 ![Expo](https://img.shields.io/badge/Expo-SDK%2054-4C97FB?style=flat-square)
 ![React Native](https://img.shields.io/badge/React%20Native-0.81-61DAFB?style=flat-square)
@@ -8,7 +8,7 @@
 
 > **Turn your smartphone into a real-time concert light controller.**
 
-Concert Light Sync transforms your phone's screen into an audio-reactive concert light with six stunning visual modes, gesture-based controls designed for dark venues, and 60fps animations powered by React Native Reanimated.
+Concert Light Sync transforms your phone's screen into an audio-reactive concert light with nine stunning visual modes, gesture-based controls designed for dark venues, and 60fps animations powered by React Native Reanimated.
 
 ---
 
@@ -34,11 +34,16 @@ Concert Light Sync was built for one purpose: making live music more immersive. 
 | 🕯 Candle | Animated flame that flickers and brightens relative to the audio level | ✓ |
 | 〰 Wave | Rainbow sine wave with audio-modulated amplitude | ✓ |
 | 🌈 Rainbow | Seven concentric arcs pulsing through the spectrum | ✓ |
+| 🎤 K-pop | Animated wave pattern synced to fan chants and idol ballads | ✓ |
+| 🪄 Light Stick | Interactive glowing stick that reacts to audio in real time | ✓ |
+| 🔮 ORB | Pulsing orb that breathes and expands with the beat | ✓ |
 
 ### Controls
 - **Swipe left/right** — cycle through modes instantly
 - **Long-press (0.6s)** — toggle screen lock to prevent accidental taps
+- **Tap canvas** — trigger a one-shot audio pulse (tap-to-simulate, no mic required)
 - **Color swatch** — opens a full HSV color picker with 7 presets
+- **Icon picker** — choose a custom icon displayed on the canvas; selection persists via AsyncStorage
 - **Brightness slider** — independent brightness control
 - **Dim UI** — fades the control panel to 7% opacity, keeping the light on without glare
 - **Lock mode** — minimal overlay shows only the lock icon
@@ -48,6 +53,12 @@ Concert Light Sync was built for one purpose: making live music more immersive. 
 - 20Hz polling rate balancing responsiveness and battery
 - Exponential moving average smoothing (α=0.3) prevents jitter
 - Graceful fallback to ambient level 0.25 if mic permission is denied
+
+### New in v1.0.2
+- **3 new modes** — K-pop, Light Stick, and ORB join the original six
+- **Custom icon** — icon picker in the control panel with AsyncStorage persistence
+- **Version check** — on launch, the app compares against the latest release and prompts users to update if a newer version is available (`utils/versionCheck.js`)
+- **Tap-to-simulate audio** — tap anywhere on the canvas to fire a one-shot audio pulse without mic permission
 
 ### Navigation & Screens
 - **Hamburger drawer** — Slides in from the left via a Reanimated spring; links to About, Tutorials, Privacy Policy, and Share
@@ -103,13 +114,15 @@ concert-light-sync/
 ├── index.html                  # Static marketing landing page
 ├── CLAUDE.md                   # Original design specification
 ├── components/
-│   ├── LightCanvas.js          # Reanimated rendering engine (all 6 modes)
+│   ├── LightCanvas.js          # Reanimated rendering engine (all 9 modes)
 │   ├── ControlPanel.js         # Bento grid UI, mode selection, color/brightness
 │   ├── ColorWheel.js           # HSV color picker with presets and haptics
 │   ├── AudioReactivity.js      # Microphone polling and signal smoothing
 │   ├── AppHeader.js            # Brand header with hamburger button (safe area aware)
 │   ├── SideDrawer.js           # Sliding navigation drawer (Reanimated spring)
 │   └── AdBanner.js             # AdMob banner (bottom of screen)
+├── utils/
+│   └── versionCheck.js         # Startup version comparison + update prompt
 └── screens/
     ├── AboutScreen.js          # App info — version, developer, links
     ├── PrivacyPolicyScreen.js  # WebView loading CDN-hosted privacy policy HTML
@@ -196,7 +209,7 @@ Key settings in `app.json`:
   "expo": {
     "name": "Concert Light Sync",
     "slug": "concert-light-sync",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "orientation": "portrait",
     "newArchEnabled": true,
     "ios": {
@@ -250,7 +263,6 @@ Contributions are welcome. Please:
 4. Open a pull request with a clear description
 
 ### Ideas for Contribution
-- Persistent settings via `AsyncStorage` (last mode, color, brightness)
 - FFT-based spectrum analysis for frequency-specific reactivity
 - Preset scene saving (party, concert, festival)
 - BPM detection and tempo-locked strobing
