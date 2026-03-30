@@ -1,6 +1,6 @@
 # Concert Light Sync
 
-![Version](https://img.shields.io/badge/version-1.0.2-FF6B00?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.3-FF6B00?style=flat-square)
 ![Platform](https://img.shields.io/badge/platform-iOS%20%7C%20Android-blue?style=flat-square)
 ![Expo](https://img.shields.io/badge/Expo-SDK%2054-4C97FB?style=flat-square)
 ![React Native](https://img.shields.io/badge/React%20Native-0.81-61DAFB?style=flat-square)
@@ -30,13 +30,13 @@ Concert Light Sync was built for one purpose: making live music more immersive. 
 |------|-------------|:--------------:|
 | ⚡ Strobe | Rapid on/off flash, safety-capped at 6Hz | — |
 | 📊 Meter | 10-bar VU meter, color-coded green/yellow/red | ✓ |
-| 💓 Pulse | Three concentric ripple rings that expand faster with louder audio | ✓ |
+| 🪩 Disco Ball | Full 3D WebGL disco ball — rotating mirrored tiles, 8 spotlight beams, atmospheric fog | ✓ |
 | 🕯 Candle | Animated flame that flickers and brightens relative to the audio level | ✓ |
 | 〰 Wave | Rainbow sine wave with audio-modulated amplitude | ✓ |
 | 🌈 Rainbow | Seven concentric arcs pulsing through the spectrum | ✓ |
 | 🎤 K-pop | Animated wave pattern synced to fan chants and idol ballads | ✓ |
 | 🪄 Light Stick | Interactive glowing stick that reacts to audio in real time | ✓ |
-| 🔮 ORB | Pulsing orb that breathes and expands with the beat | ✓ |
+| ✨ Pulse | Spinning light ball with 8 orbiting colored ray dots that expand with the beat | ✓ |
 
 ### Controls
 - **Swipe left/right** — cycle through modes instantly
@@ -54,8 +54,12 @@ Concert Light Sync was built for one purpose: making live music more immersive. 
 - Exponential moving average smoothing (α=0.3) prevents jitter
 - Graceful fallback to ambient level 0.25 if mic permission is denied
 
+### New in v1.0.3
+- **Disco Ball mode** — full 3D WebGL disco ball powered by Three.js (`components/DiscoBall.jsx`): rotating mirrored tiles, 8 colored spotlight beams, atmospheric fog, drag-to-tilt camera, spin/lights toggles, and audio-reactive glow
+- **Mode rename** — ORB renamed to **Pulse** (spinning light ball with 8 orbiting colored ray dots)
+
 ### New in v1.0.2
-- **3 new modes** — K-pop, Light Stick, and ORB join the original six
+- **3 new modes** — K-pop, Light Stick, and Pulse join the original six
 - **Custom icon** — icon picker in the control panel with AsyncStorage persistence
 - **Version check** — on launch, the app compares against the latest release and prompts users to update if a newer version is available (`utils/versionCheck.js`)
 - **Tap-to-simulate audio** — tap anywhere on the canvas to fire a one-shot audio pulse without mic permission
@@ -115,6 +119,7 @@ concert-light-sync/
 ├── CLAUDE.md                   # Original design specification
 ├── components/
 │   ├── LightCanvas.js          # Reanimated rendering engine (all 9 modes)
+│   ├── DiscoBall.jsx           # Three.js/WebGL 3D disco ball (expo-gl)
 │   ├── ControlPanel.js         # Bento grid UI, mode selection, color/brightness
 │   ├── ColorWheel.js           # HSV color picker with presets and haptics
 │   ├── AudioReactivity.js      # Microphone polling and signal smoothing
@@ -138,6 +143,8 @@ concert-light-sync/
 **`ControlPanel.js`** — The 3×2 bento grid of mode tiles, brightness slider, color swatch, and top-bar toggles (Dim, Lock). Uses React Native `Animated` for the Dim UI fade since it doesn't need native-thread precision.
 
 **`ColorWheel.js`** — HSV color picker. Two `PanResponder` handlers drive the hue and brightness sliders. Fires haptic feedback at primary hue nodes (0°, 60°, 120°, 180°, 240°, 300°). Converts HSV → Hex for the rest of the app.
+
+**`DiscoBall.jsx`** — Three.js/WebGL 3D disco ball rendered inside an `expo-gl` GLView. Builds a high-fidelity mirrored-tile sphere, 8 rotating colored spotlight beams, and an atmospheric fog layer. Accepts `audioLevelRef` to modulate rotation speed and glow intensity. Uses `InteractionManager.runAfterInteractions` for deferred GL context initialization and cleans up all Three.js objects on unmount to prevent memory leaks.
 
 **`AudioReactivity.js`** — Invisible component (returns `null`). Requests mic permission, starts `expo-audio` recording with metering enabled, and polls every 50ms. Writes the smoothed audio level to `audioLevelRef` — a ref, not state, so it never triggers re-renders.
 
@@ -209,7 +216,7 @@ Key settings in `app.json`:
   "expo": {
     "name": "Concert Light Sync",
     "slug": "concert-light-sync",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "orientation": "portrait",
     "newArchEnabled": true,
     "ios": {

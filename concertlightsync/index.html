@@ -379,26 +379,94 @@
       100% { height: var(--h); }
     }
 
-    /* ── Pulse preview ── */
-    .preview-pulse {
-      background: #121212;
+    /* ── Disco Ball preview ── */
+    .preview-discoball {
+      background: #080010;
       display: flex;
       align-items: center;
       justify-content: center;
+      position: relative;
+      overflow: hidden;
     }
-    .pulse-ring {
-      position: absolute;
-      width: 60px; height: 60px;
+    .discoball-sphere {
+      width: 72px;
+      height: 72px;
       border-radius: 50%;
-      border: 2px solid rgba(255,107,0,0.7);
-      animation: pulseRing 1.8s ease-in-out infinite;
+      background: radial-gradient(circle at 35% 35%, #ffffff 0%, #c0c0d0 25%, #6060a0 55%, #101030 100%);
+      box-shadow: 0 0 24px 8px rgba(160,120,255,0.45), 0 0 60px 20px rgba(80,0,200,0.25);
+      animation: discoBallSpin 4s linear infinite;
+      position: relative;
+      overflow: hidden;
     }
-    .pulse-ring:nth-child(2) { animation-delay: -0.6s; }
-    .pulse-ring:nth-child(3) { animation-delay: -1.2s; }
-    @keyframes pulseRing {
-      0%   { transform: scale(0.2); opacity: 0.75; }
-      80%  { transform: scale(1.5); opacity: 0; }
-      100% { transform: scale(0.2); opacity: 0; }
+    .discoball-glint {
+      position: absolute;
+      border-radius: 2px;
+      background: rgba(255,255,255,0.9);
+      animation: discoBallGlint 1.2s ease-in-out infinite alternate;
+    }
+    .discoball-glint:nth-child(1) { width: 6px; height: 6px; top: 18%; left: 22%; animation-delay: 0s; }
+    .discoball-glint:nth-child(2) { width: 5px; height: 5px; top: 35%; left: 62%; animation-delay: 0.2s; }
+    .discoball-glint:nth-child(3) { width: 4px; height: 4px; top: 55%; left: 28%; animation-delay: 0.4s; }
+    .discoball-glint:nth-child(4) { width: 6px; height: 6px; top: 70%; left: 55%; animation-delay: 0.1s; }
+    .discoball-glint:nth-child(5) { width: 3px; height: 3px; top: 45%; left: 45%; animation-delay: 0.35s; }
+    .discoball-beam {
+      position: absolute;
+      width: 2px;
+      height: 80px;
+      top: 50%; left: 50%;
+      transform-origin: top center;
+      opacity: 0.55;
+      animation: beamSweep 3s linear infinite;
+    }
+    .discoball-beam:nth-child(1) { background: linear-gradient(to bottom, #FF3366, transparent); transform: rotate(0deg); animation-delay: 0s; }
+    .discoball-beam:nth-child(2) { background: linear-gradient(to bottom, #FF9900, transparent); transform: rotate(45deg); animation-delay: -0.375s; }
+    .discoball-beam:nth-child(3) { background: linear-gradient(to bottom, #FFFF00, transparent); transform: rotate(90deg); animation-delay: -0.75s; }
+    .discoball-beam:nth-child(4) { background: linear-gradient(to bottom, #00FF88, transparent); transform: rotate(135deg); animation-delay: -1.125s; }
+    .discoball-beam:nth-child(5) { background: linear-gradient(to bottom, #00E5FF, transparent); transform: rotate(180deg); animation-delay: -1.5s; }
+    .discoball-beam:nth-child(6) { background: linear-gradient(to bottom, #9B30FF, transparent); transform: rotate(225deg); animation-delay: -1.875s; }
+    .discoball-beam:nth-child(7) { background: linear-gradient(to bottom, #FF00AA, transparent); transform: rotate(270deg); animation-delay: -2.25s; }
+    .discoball-beam:nth-child(8) { background: linear-gradient(to bottom, #FF6B00, transparent); transform: rotate(315deg); animation-delay: -2.625s; }
+    @keyframes discoBallSpin {
+      from { filter: hue-rotate(0deg) brightness(1); }
+      to   { filter: hue-rotate(360deg) brightness(1.3); }
+    }
+    @keyframes discoBallGlint {
+      0%   { opacity: 0.2; transform: scale(0.8); }
+      100% { opacity: 1; transform: scale(1.4); }
+    }
+    @keyframes beamSweep {
+      from { transform: rotate(var(--base-rot, 0deg)); opacity: 0.6; }
+      50%  { opacity: 0.9; }
+      to   { transform: rotate(calc(var(--base-rot, 0deg) + 360deg)); opacity: 0.6; }
+    }
+
+    /* ── Pulse preview (orbiting dots) ── */
+    .preview-pulse {
+      background: #080010;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .pulse-core {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 38% 38%, #e0aaff 0%, #9B30FF 45%, #3d0080 100%);
+      box-shadow: 0 0 20px 8px rgba(155,48,255,0.55);
+      animation: orbBreath 2.4s ease-in-out infinite alternate;
+      position: relative;
+      z-index: 1;
+    }
+    .pulse-dot {
+      position: absolute;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      animation: pulseOrbit var(--dur) linear infinite;
+    }
+    @keyframes pulseOrbit {
+      from { transform: rotate(0deg) translateX(46px) rotate(0deg); }
+      to   { transform: rotate(360deg) translateX(46px) rotate(-360deg); }
     }
 
     /* ── Candle preview ── */
@@ -519,23 +587,6 @@
       100% { box-shadow: 0 0 32px 14px rgba(160,200,255,0.85), 0 0 80px 28px rgba(120,160,255,0.45); }
     }
 
-    /* ── ORB preview ── */
-    .preview-orb {
-      background: #080010;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .orb-core {
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 38% 38%, #e0aaff 0%, #9B30FF 45%, #3d0080 100%);
-      box-shadow: 0 0 30px 12px rgba(155,48,255,0.55), 0 0 70px 24px rgba(100,0,200,0.3);
-      animation: orbBreath 2.4s ease-in-out infinite alternate;
-    }
     @keyframes orbBreath {
       0%   { transform: scale(0.85); box-shadow: 0 0 20px 8px rgba(155,48,255,0.4), 0 0 50px 16px rgba(100,0,200,0.2); }
       100% { transform: scale(1.15); box-shadow: 0 0 40px 18px rgba(180,80,255,0.7), 0 0 90px 32px rgba(130,0,255,0.4); }
@@ -883,7 +934,7 @@
     <div class="grid-lines"></div>
 
     <div class="hero-content">
-      <div class="hero-eyebrow">React Native · Expo SDK 54 · v1.0.2</div>
+      <div class="hero-eyebrow">React Native · Expo SDK 54 · v1.0.3</div>
       <h1 class="hero-title">
         Turn Your Phone Into<br>
         a <span class="highlight">Concert Light</span>
@@ -945,14 +996,26 @@
         </div>
 
         <div class="mode-card reveal">
-          <div class="mode-preview preview-pulse" style="position:relative;">
-            <div class="pulse-ring"></div>
-            <div class="pulse-ring"></div>
-            <div class="pulse-ring"></div>
+          <div class="mode-preview preview-discoball">
+            <div class="discoball-beam"></div>
+            <div class="discoball-beam"></div>
+            <div class="discoball-beam"></div>
+            <div class="discoball-beam"></div>
+            <div class="discoball-beam"></div>
+            <div class="discoball-beam"></div>
+            <div class="discoball-beam"></div>
+            <div class="discoball-beam"></div>
+            <div class="discoball-sphere">
+              <div class="discoball-glint"></div>
+              <div class="discoball-glint"></div>
+              <div class="discoball-glint"></div>
+              <div class="discoball-glint"></div>
+              <div class="discoball-glint"></div>
+            </div>
           </div>
           <div class="mode-info">
-            <div class="mode-name">💓 Pulse</div>
-            <div class="mode-desc">Three concentric ripple rings expand outward in sequence. Louder audio accelerates the rings; silence lets them drift slowly.</div>
+            <div class="mode-name">🪩 Disco Ball</div>
+            <div class="mode-desc">Full 3D WebGL disco ball powered by Three.js — spinning mirrored tiles, 8 rotating spotlight beams, atmospheric fog, and audio-reactive glow.</div>
             <span class="mode-tag tag-audio">Audio Reactive</span>
           </div>
         </div>
@@ -1010,12 +1073,20 @@
         </div>
 
         <div class="mode-card reveal">
-          <div class="mode-preview preview-orb">
-            <div class="orb-core"></div>
+          <div class="mode-preview preview-pulse" style="position:relative;">
+            <div class="pulse-dot" style="background:#FF3366; --dur:2.4s;"></div>
+            <div class="pulse-dot" style="background:#FF9900; --dur:2.4s; animation-delay:-0.3s;"></div>
+            <div class="pulse-dot" style="background:#00FF88; --dur:2.4s; animation-delay:-0.6s;"></div>
+            <div class="pulse-dot" style="background:#00E5FF; --dur:2.4s; animation-delay:-0.9s;"></div>
+            <div class="pulse-dot" style="background:#9B30FF; --dur:2.4s; animation-delay:-1.2s;"></div>
+            <div class="pulse-dot" style="background:#FFD700; --dur:2.4s; animation-delay:-1.5s;"></div>
+            <div class="pulse-dot" style="background:#FF00AA; --dur:2.4s; animation-delay:-1.8s;"></div>
+            <div class="pulse-dot" style="background:#FF6B00; --dur:2.4s; animation-delay:-2.1s;"></div>
+            <div class="pulse-core"></div>
           </div>
           <div class="mode-info">
-            <div class="mode-name">🔮 ORB</div>
-            <div class="mode-desc">A pulsing orb that breathes and expands with the beat — hypnotic, immersive, and impossible to ignore.</div>
+            <div class="mode-name">✨ Pulse</div>
+            <div class="mode-desc">Spinning light ball with 8 orbiting colored ray dots. Louder audio pushes the dots farther out and cranks up the glow.</div>
             <span class="mode-tag tag-audio">Audio Reactive</span>
           </div>
         </div>
@@ -1123,8 +1194,8 @@
           <div class="stat-label">Sample Rate</div>
         </div>
         <div class="stat">
-          <div class="stat-num">6</div>
-          <div class="stat-label">Light Modes</div>
+          <div class="stat-num">8</div>
+          <div class="stat-label">Audio Modes</div>
         </div>
         <div class="stat">
           <div class="stat-num">60fps</div>
@@ -1246,7 +1317,7 @@
       <a href="README.md">Documentation</a>
     </div>
     <div class="footer-bottom">
-      v1.0.2 &nbsp;·&nbsp; MIT License &nbsp;·&nbsp; Made with React Native &amp; Expo
+      v1.0.3 &nbsp;·&nbsp; MIT License &nbsp;·&nbsp; Made with React Native &amp; Expo
     </div>
   </footer>
 
@@ -1311,15 +1382,15 @@
 
     // Phone mockup cycling
     const modes = [
-      { label: 'Candle Mode',      bg: '#000' },
-      { label: 'Meter Mode',       bg: 'linear-gradient(to top, #00FF88 0%, #FFD700 50%, #FF3333 100%)' },
-      { label: 'Pulse Mode',       bg: '#FF3366' },
-      { label: 'Rainbow Mode',     bg: 'conic-gradient(from 0deg,#FF0000,#FFD700,#00FF88,#00E5FF,#9B30FF,#FF0000)' },
-      { label: 'Wave Mode',        bg: '#1a0a00' },
-      { label: 'Strobe Mode',      bg: '#f5f5ff' },
-      { label: 'K-pop Mode',       bg: 'linear-gradient(135deg,#1a0030,#3d0080,#6600cc)' },
-      { label: 'Light Stick Mode', bg: 'radial-gradient(circle at 50% 40%, #a0c8ff 0%, #1a3a7a 60%, #050510 100%)' },
-      { label: 'ORB Mode',         bg: 'radial-gradient(circle at 50% 50%, #e0aaff 0%, #6600cc 45%, #080010 100%)' },
+      { label: 'Candle Mode',       bg: '#000' },
+      { label: 'Meter Mode',        bg: 'linear-gradient(to top, #00FF88 0%, #FFD700 50%, #FF3333 100%)' },
+      { label: 'Disco Ball Mode',   bg: 'radial-gradient(circle at 35% 35%, #ffffff 0%, #9090c0 30%, #303080 60%, #080018 100%)' },
+      { label: 'Rainbow Mode',      bg: 'conic-gradient(from 0deg,#FF0000,#FFD700,#00FF88,#00E5FF,#9B30FF,#FF0000)' },
+      { label: 'Wave Mode',         bg: '#1a0a00' },
+      { label: 'Strobe Mode',       bg: '#f5f5ff' },
+      { label: 'K-pop Mode',        bg: 'linear-gradient(135deg,#1a0030,#3d0080,#6600cc)' },
+      { label: 'Light Stick Mode',  bg: 'radial-gradient(circle at 50% 40%, #a0c8ff 0%, #1a3a7a 60%, #050510 100%)' },
+      { label: 'Pulse Mode',        bg: 'radial-gradient(circle at 50% 50%, #e0aaff 0%, #6600cc 45%, #080010 100%)' },
     ];
     let modeIdx = 0;
     const phoneScreen = document.getElementById('phoneScreen');
