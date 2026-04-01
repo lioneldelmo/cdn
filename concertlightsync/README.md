@@ -32,7 +32,7 @@ Concert Light Sync was built for one purpose: making live music more immersive. 
 | 📊 Meter | 10-bar VU meter, color-coded green/yellow/red | ✓ |
 | 🪩 Disco Ball | Full 3D WebGL disco ball — rotating mirrored tiles, 8 spotlight beams, atmospheric fog | ✓ |
 | 🕯 Candle | Animated flame that flickers and brightens relative to the audio level | ✓ |
-| 〰 Wave | Rainbow sine wave with audio-modulated amplitude | ✓ |
+| 〰 Wave | Rainbow sine wave with audio-modulated amplitude + scrolling dot-matrix marquee | ✓ |
 | 🌈 Rainbow | Seven concentric arcs pulsing through the spectrum | ✓ |
 | 🎤 K-pop | Animated wave pattern synced to fan chants and idol ballads | ✓ |
 | 🪄 Light Stick | Interactive glowing stick that reacts to audio in real time | ✓ |
@@ -41,6 +41,7 @@ Concert Light Sync was built for one purpose: making live music more immersive. 
 ### Controls
 - **Swipe left/right** — cycle through modes instantly
 - **Long-press (0.6s)** — toggle screen lock to prevent accidental taps
+- **Long-press marquee (5s)** — edit the scrolling message displayed in Wave mode
 - **Tap canvas** — trigger a one-shot audio pulse (tap-to-simulate, no mic required)
 - **Color swatch** — opens a full HSV color picker with 7 presets
 - **Icon picker** — choose a custom icon displayed on the canvas; selection persists via AsyncStorage
@@ -57,6 +58,8 @@ Concert Light Sync was built for one purpose: making live music more immersive. 
 ### New in v1.0.3
 - **Disco Ball mode** — full 3D WebGL disco ball powered by Three.js (`components/DiscoBall.jsx`): rotating mirrored tiles, 8 colored spotlight beams, atmospheric fog, drag-to-tilt camera, spin/lights toggles, and audio-reactive glow
 - **Mode rename** — ORB renamed to **Pulse** (spinning light ball with 8 orbiting colored ray dots)
+- **Wave marquee** — a scrolling rainbow dot-matrix message appears at the top of the screen in Wave mode. Default text is "Concert Light Sync". Long-press the marquee for 5 seconds to edit the message; leave it empty to hide it. The message persists across sessions.
+- **Marquee VU meter** — the 7 dot rows of the marquee light up progressively from bottom to top in sync with the audio level, mirroring the Meter mode's green/yellow/red behaviour.
 
 ### New in v1.0.2
 - **3 new modes** — K-pop, Light Stick, and Pulse join the original six
