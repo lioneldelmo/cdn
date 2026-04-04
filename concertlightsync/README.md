@@ -44,7 +44,8 @@ Concert Light Sync was built for one purpose: making live music more immersive. 
 - **Long-press marquee (5s)** — edit the scrolling message displayed in Wave mode
 - **Tap canvas** — trigger a one-shot audio pulse (tap-to-simulate, no mic required)
 - **Color swatch** — opens a full HSV color picker with 7 presets
-- **Icon picker** — choose a custom icon displayed on the canvas; selection persists via AsyncStorage
+- **Icon picker** — choose a custom icon displayed on the canvas; tap once for single-select or tap multiple icons to enable auto-cycling; long-press any custom slot for 5 seconds to assign your own glyph or emoji; selection persists via AsyncStorage
+- **Audio sensitivity slider** — drag to tune how strongly the visuals react to sound (0–100%); persists across sessions
 - **Brightness slider** — independent brightness control
 - **Dim UI** — fades the control panel to 7% opacity, keeping the light on without glare
 - **Lock mode** — minimal overlay shows only the lock icon
@@ -60,6 +61,9 @@ Concert Light Sync was built for one purpose: making live music more immersive. 
 - **Mode rename** — ORB renamed to **Pulse** (spinning light ball with 8 orbiting colored ray dots)
 - **Wave marquee** — a scrolling rainbow dot-matrix message appears at the top of the screen in Wave mode. Default text is "Concert Light Sync". Long-press the marquee for 5 seconds to edit the message; leave it empty to hide it. The message persists across sessions.
 - **Marquee VU meter** — the 7 dot rows of the marquee light up progressively from bottom to top in sync with the audio level, mirroring the Meter mode's green/yellow/red behaviour.
+- **Marquee glyph support** — the Wave marquee now renders any Unicode character outside the 5×7 dot-matrix font (emoji, music symbols, special glyphs) as native text, so any character can appear in the scrolling message.
+- **Audio Sensitivity slider** — a 0–100% drag control in the control panel lets you tune exactly how strongly the visuals respond to ambient sound. Setting is persisted via AsyncStorage.
+- **Icon multi-select and cycling** — tap multiple icons in the icon picker to enable auto-cycling between them at a configurable interval (1–10 s). Long-press any custom icon slot for 5 seconds to assign your own glyph or emoji.
 
 ### New in v1.0.2
 - **3 new modes** — K-pop, Light Stick, and Pulse join the original six
