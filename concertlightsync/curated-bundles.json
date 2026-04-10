@@ -92,5 +92,37 @@
         "custom4": "◈"
       }
     }
+  },
+    {
+    "id": "ultra-violet-2",
+    "name": "Ultra Violet 2",
+    "tags": [
+      "curated",
+      "arena"
+    ],
+    "scene": {
+      "modeIndex": 7,
+      "color": "#C43DFF",
+      "brightness": 1,
+      "sensitivity": 66,
+      "beatReactiveEnabled": true,
+      "beatAccent": 63,
+      "marqueeText": "ULTRA VIOLET 2",
+      "marqueeRainbow": false,
+      "selectedLogoId": "fan",
+      "activeIconIds": [
+        "fan",
+        "triangle",
+        "blackstar",
+        "double"
+      ],
+      "iconCycleInterval": 2,
+      "customGlyphs": {
+        "custom1": "✶",
+        "custom2": "☾",
+        "custom3": "♫",
+        "custom4": "◈"
+      }
+    }
   }
 ]
