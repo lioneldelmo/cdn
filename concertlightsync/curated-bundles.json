@@ -1,0 +1,96 @@
+[
+  {
+    "id": "neon-surge",
+    "name": "Neon Surge",
+    "tags": [
+      "curated",
+      "electro"
+    ],
+    "scene": {
+      "modeIndex": 8,
+      "color": "#00D9FF",
+      "brightness": 1,
+      "sensitivity": 72,
+      "beatReactiveEnabled": true,
+      "beatAccent": 74,
+      "marqueeText": "NEON SURGE",
+      "marqueeRainbow": true,
+      "selectedLogoId": "beamed",
+      "activeIconIds": [
+        "beamed",
+        "double",
+        "star"
+      ],
+      "iconCycleInterval": 2,
+      "customGlyphs": {
+        "custom1": "♪",
+        "custom2": "◆",
+        "custom3": "⚡",
+        "custom4": "★"
+      }
+    }
+  },
+  {
+    "id": "sunset-chant",
+    "name": "Sunset Chant",
+    "tags": [
+      "curated",
+      "warm"
+    ],
+    "scene": {
+      "modeIndex": 6,
+      "color": "#FF6B00",
+      "brightness": 0.95,
+      "sensitivity": 58,
+      "beatReactiveEnabled": true,
+      "beatAccent": 48,
+      "marqueeText": "SUNSET CHANT",
+      "marqueeRainbow": false,
+      "selectedLogoId": "heart",
+      "activeIconIds": [
+        "heart",
+        "diamond",
+        "circle"
+      ],
+      "iconCycleInterval": 3,
+      "customGlyphs": {
+        "custom1": "♥",
+        "custom2": "♪",
+        "custom3": "✦",
+        "custom4": "☼"
+      }
+    }
+  },
+  {
+    "id": "ultra-violet",
+    "name": "Ultra Violet",
+    "tags": [
+      "curated",
+      "arena"
+    ],
+    "scene": {
+      "modeIndex": 7,
+      "color": "#C43DFF",
+      "brightness": 1,
+      "sensitivity": 66,
+      "beatReactiveEnabled": true,
+      "beatAccent": 63,
+      "marqueeText": "ULTRA VIOLET",
+      "marqueeRainbow": true,
+      "selectedLogoId": "fan",
+      "activeIconIds": [
+        "fan",
+        "triangle",
+        "blackstar",
+        "double"
+      ],
+      "iconCycleInterval": 2,
+      "customGlyphs": {
+        "custom1": "✶",
+        "custom2": "☾",
+        "custom3": "♫",
+        "custom4": "◈"
+      }
+    }
+  }
+]
