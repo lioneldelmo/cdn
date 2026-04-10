@@ -1,6 +1,6 @@
 # Concert Light Sync
 
-![Version](https://img.shields.io/badge/version-1.0.3-FF6B00?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.4-FF6B00?style=flat-square)
 ![Platform](https://img.shields.io/badge/platform-iOS%20%7C%20Android-blue?style=flat-square)
 ![Expo](https://img.shields.io/badge/Expo-SDK%2054-4C97FB?style=flat-square)
 ![React Native](https://img.shields.io/badge/React%20Native-0.81-61DAFB?style=flat-square)
@@ -54,7 +54,17 @@ Concert Light Sync was built for one purpose: making live music more immersive. 
 - Live microphone input via `expo-audio`
 - 20Hz polling rate balancing responsiveness and battery
 - Exponential moving average smoothing (α=0.3) prevents jitter
+- Adaptive beat-onset detection (slope + baseline threshold + refractory window)
 - Graceful fallback to ambient level 0.25 if mic permission is denied
+
+### New in v1.0.4 (Current Branch)
+- **Beat intelligence (onset detection)** — visuals now react to detected beat transients, not only raw loudness.
+- **Beat controls** — Beat Accent slider + Beat On/Off toggle in the control panel, with AsyncStorage persistence.
+- **Scene bundles** — save your complete setup (mode, color, brightness, sensitivity, beat settings, marquee settings, icon/glyph state) as reusable bundles.
+- **Preset Library** — dedicated screen to apply/delete saved bundles and browse curated packs.
+- **Curated packs** — built-in bundles (Neon Surge, Sunset Chant, Ultra Violet) can be applied instantly or added to your personal bundle library.
+- **Bundle transfer** — QR screen now supports bundle payload sharing and paste-based bundle import.
+- **Immediate import refresh** — imported bundles appear in the library without requiring an app restart.
 
 ### New in v1.0.3
 - **Disco Ball mode** — full 3D WebGL disco ball powered by Three.js (`components/DiscoBall.jsx`): rotating mirrored tiles, 8 colored spotlight beams, atmospheric fog, drag-to-tilt camera, spin/lights toggles, and audio-reactive glow
@@ -73,6 +83,7 @@ Concert Light Sync was built for one purpose: making live music more immersive. 
 
 ### Navigation & Screens
 - **Hamburger drawer** — Slides in from the left via a Reanimated spring; links to About, Tutorials, Privacy Policy, and Share
+- **Preset Library screen** — Manage saved bundles and curated packs with apply/delete/add actions
 - **About screen** — App info with logo, version, developer, website, and support email
 - **Privacy Policy screen** — WebView loading CDN-hosted HTML with loading indicator and error/retry state
 - **Tutorials screen** — Scrollable glassmorphism cards covering every feature
@@ -223,7 +234,7 @@ Key settings in `app.json`:
   "expo": {
     "name": "Concert Light Sync",
     "slug": "concert-light-sync",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "orientation": "portrait",
     "newArchEnabled": true,
     "ios": {

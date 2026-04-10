@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Concert Light Sync — Turn Your Phone Into a Concert Light</title>
-  <meta name="description" content="Transform your smartphone into a real-time concert light controller. 9 stunning modes, audio-reactive effects, gesture controls. Built for concert-goers." />
+  <meta name="description" content="Transform your smartphone into a real-time concert light controller. 9 lighting modes, beat-intelligent audio reactivity, scene bundles, and QR sharing." />
   <style>
     /* ─── CSS Custom Properties ───────────────────────────────── */
     :root {
@@ -934,14 +934,14 @@
     <div class="grid-lines"></div>
 
     <div class="hero-content">
-      <div class="hero-eyebrow">React Native · Expo SDK 54 · v1.0.3</div>
+      <div class="hero-eyebrow">React Native · Expo SDK 54 · v1.0.4</div>
       <h1 class="hero-title">
         Turn Your Phone Into<br>
         a <span class="highlight">Concert Light</span>
       </h1>
       <p class="hero-sub">
-        Audio-reactive lighting modes that pulse with the beat. Gesture controls
-        built for dark crowds. Nine stunning effects at your fingertips.
+        Beat-intelligent lighting that detects onsets in real time. Save full scene bundles,
+        share them by QR, and launch curated presets in one tap.
       </p>
       <div class="hero-cta">
         <a href="#modes" class="btn btn-primary">
@@ -1163,7 +1163,7 @@
       <div class="reveal">
         <span class="section-label">Audio Reactivity</span>
         <h2 class="section-title">Feels the music.<br>Becomes the music.</h2>
-        <p class="section-sub">A live microphone pipeline samples ambient sound 20 times per second, smooths the signal, and drives your lights in real-time.</p>
+        <p class="section-sub">A live microphone pipeline samples ambient sound 20 times per second, smooths the signal, and uses adaptive onset detection to accent beats in real time.</p>
       </div>
 
       <div class="waveform reveal" id="waveform"></div>
@@ -1179,6 +1179,11 @@
             <span class="feature-icon">📊</span>
             <div class="feature-title">Signal Smoothing</div>
             <div class="feature-desc">Exponential moving average (α=0.3) removes jitter so transitions look intentional, not jerky.</div>
+          </div>
+          <div class="feature-card">
+            <span class="feature-icon">🥁</span>
+            <div class="feature-title">Beat Onset Intelligence</div>
+            <div class="feature-desc">Slope + adaptive baseline threshold with a refractory window catches beat transients and adds controlled visual punch.</div>
           </div>
           <div class="feature-card">
             <span class="feature-icon">⚡</span>
@@ -1269,6 +1274,21 @@
           <div class="feature-desc">Drag the sensitivity slider (0–100%) to dial in exactly how strongly the visuals respond to sound. Your setting is saved between sessions.</div>
         </div>
         <div class="feature-card">
+          <span class="feature-icon">🥁</span>
+          <div class="feature-title">Beat Accent Controls</div>
+          <div class="feature-desc">Tune Beat Accent strength with a dedicated slider and toggle beat-reactive behavior on or off, both persisted across sessions.</div>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">📚</span>
+          <div class="feature-title">Preset Library</div>
+          <div class="feature-desc">Save complete scene bundles and manage them in a dedicated library with apply, delete, and add-from-curated actions.</div>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">🔁</span>
+          <div class="feature-title">Bundle QR Transfer</div>
+          <div class="feature-desc">Share your latest bundle as a QR payload and import received bundles from text payloads directly into your library.</div>
+        </div>
+        <div class="feature-card">
           <span class="feature-icon">🎴</span>
           <div class="feature-title">Icon Picker &amp; Cycling</div>
           <div class="feature-desc">Tap an icon for single-select, or tap multiple icons to enable auto-cycling at a configurable interval. Long-press any custom slot for 5 seconds to enter your own glyph or emoji.</div>
@@ -1332,7 +1352,7 @@
       <a href="README.md">Documentation</a>
     </div>
     <div class="footer-bottom">
-      v1.0.3 &nbsp;·&nbsp; MIT License &nbsp;·&nbsp; Made with React Native &amp; Expo
+      v1.0.4 &nbsp;·&nbsp; MIT License &nbsp;·&nbsp; Made with React Native &amp; Expo
     </div>
   </footer>
 
