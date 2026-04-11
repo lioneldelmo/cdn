@@ -61,7 +61,7 @@ Concert Light Sync was built for one purpose: making live music more immersive. 
 - **Beat intelligence (onset detection)** — visuals now react to detected beat transients, not only raw loudness.
 - **Beat controls** — Beat Accent slider + Beat On/Off toggle in the control panel, with AsyncStorage persistence.
 - **Scene bundles** — save your complete setup (mode, color, brightness, sensitivity, beat settings, marquee settings, icon/glyph state) as reusable bundles.
-- **Preset Library** — dedicated screen to apply/delete saved bundles and browse curated packs.
+- **Bundle Library** — dedicated screen to apply/delete saved bundles and browse curated packs.
 - **Curated packs** — built-in bundles (Neon Surge, Sunset Chant, Ultra Violet) can be applied instantly or added to your personal bundle library.
 - **Bundle transfer** — QR screen now supports bundle payload sharing and paste-based bundle import.
 - **Immediate import refresh** — imported bundles appear in the library without requiring an app restart.
@@ -83,7 +83,7 @@ Concert Light Sync was built for one purpose: making live music more immersive. 
 
 ### Navigation & Screens
 - **Hamburger drawer** — Slides in from the left via a Reanimated spring; links to About, Tutorials, Privacy Policy, and Share
-- **Preset Library screen** — Manage saved bundles and curated packs with apply/delete/add actions
+- **Bundle Library screen** — Manage saved bundles and curated packs with apply/delete/add actions
 - **About screen** — App info with logo, version, developer, website, and support email
 - **Privacy Policy screen** — WebView loading CDN-hosted HTML with loading indicator and error/retry state
 - **Tutorials screen** — Scrollable glassmorphism cards covering every feature
