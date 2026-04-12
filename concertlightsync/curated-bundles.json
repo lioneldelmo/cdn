@@ -46,11 +46,10 @@
       "beatAccent": 65,
       "marqueeText": "ARMY BOMB",
       "marqueeRainbow": false,
-      "selectedLogoId": "heart",
+      "selectedLogoId": "star",
       "activeIconIds": [
-        "heart",
         "star",
-        "circle"
+        "fan"
       ],
       "iconCycleInterval": 2,
       "customGlyphs": {
