@@ -1,5 +1,67 @@
 [
   {
+    "id": "24k-magic",
+    "name": "24K Magic",
+    "tags": [
+      "curated",
+      "trending"
+    ],
+    "scene": {
+      "modeIndex": 6,
+      "color": "#FFB800",
+      "brightness": 1,
+      "sensitivity": 62,
+      "beatReactiveEnabled": true,
+      "beatAccent": 55,
+      "marqueeText": "24K MAGIC",
+      "marqueeRainbow": false,
+      "selectedLogoId": "star",
+      "activeIconIds": [
+        "star",
+        "diamond",
+        "double"
+      ],
+      "iconCycleInterval": 3,
+      "customGlyphs": {
+        "custom1": "♦",
+        "custom2": "★",
+        "custom3": "♪",
+        "custom4": "✦"
+      }
+    }
+  },
+  {
+    "id": "army-bomb",
+    "name": "ARMY Bomb",
+    "tags": [
+      "curated",
+      "trending"
+    ],
+    "scene": {
+      "modeIndex": 7,
+      "color": "#9B4DCA",
+      "brightness": 1,
+      "sensitivity": 70,
+      "beatReactiveEnabled": true,
+      "beatAccent": 65,
+      "marqueeText": "ARMY BOMB",
+      "marqueeRainbow": false,
+      "selectedLogoId": "heart",
+      "activeIconIds": [
+        "heart",
+        "star",
+        "circle"
+      ],
+      "iconCycleInterval": 2,
+      "customGlyphs": {
+        "custom1": "♡",
+        "custom2": "✿",
+        "custom3": "☆",
+        "custom4": "♪"
+      }
+    }
+  },
+  {
     "id": "neon-surge",
     "name": "Neon Surge",
     "tags": [
@@ -77,38 +139,6 @@
       "beatAccent": 63,
       "marqueeText": "ULTRA VIOLET",
       "marqueeRainbow": true,
-      "selectedLogoId": "fan",
-      "activeIconIds": [
-        "fan",
-        "triangle",
-        "blackstar",
-        "double"
-      ],
-      "iconCycleInterval": 2,
-      "customGlyphs": {
-        "custom1": "✶",
-        "custom2": "☾",
-        "custom3": "♫",
-        "custom4": "◈"
-      }
-    }
-  },
-    {
-    "id": "ultra-violet-2",
-    "name": "Ultra Violet 2",
-    "tags": [
-      "curated",
-      "arena"
-    ],
-    "scene": {
-      "modeIndex": 7,
-      "color": "#C43DFF",
-      "brightness": 1,
-      "sensitivity": 66,
-      "beatReactiveEnabled": true,
-      "beatAccent": 63,
-      "marqueeText": "ULTRA VIOLET 2",
-      "marqueeRainbow": false,
       "selectedLogoId": "fan",
       "activeIconIds": [
         "fan",
