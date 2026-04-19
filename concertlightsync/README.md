@@ -23,6 +23,29 @@ Concert Light Sync was built for one purpose: making live music more immersive. 
 
 ---
 
+## Promotional Copy
+
+### Tagline
+**Feel the beat. Light the crowd. Own the moment.**
+
+### Short Promo (App Store / Product Hunt)
+Turn your phone into an audio-reactive concert light in seconds. Concert Light Sync listens to live music and transforms your screen into a vivid, high-brightness light show with immersive modes, smooth swipe controls, and one-handed dark-venue usability.
+
+### Full Promo (Website / Press Kit)
+Concert Light Sync is built for live music fans who want to become part of the show. From festivals and arenas to club nights and house parties, the app reacts to the sound around you in real time and turns your screen into a dynamic performance light.
+
+Choose from multiple visual modes including Strobe, Pulse, Rainbow, Wave, Candle, and a 3D Disco Ball. Fine-tune brightness, color, and audio sensitivity, then switch modes instantly with simple gestures designed for crowded, low-light environments. With smooth 60fps animations, haptic feedback, and a dimmable control UI, Concert Light Sync gives you bold visuals without distracting glare.
+
+If you're in the crowd, this is your light stick, your atmosphere, and your moment.
+
+### Social Captions
+- Your flashlight is now the light show. #ConcertLightSync
+- Built for festivals, clubs, and stadium nights. Swipe, glow, repeat.
+- Real-time audio-reactive visuals on your phone. No extra hardware needed.
+- Pick your color. Raise your phone. Match the music.
+
+---
+
 ## Features
 
 ### Lighting Modes
@@ -230,6 +253,11 @@ The app requests **microphone access** on first launch. Audio reactivity require
 
 ### Strobe Mode
 Selecting Strobe shows a photosensitivity warning. You must confirm before the mode activates. Frequency is hard-capped at 6Hz for safety.
+
+### Runtime Warnings (Three.js / Expo GL)
+- `THREE.Clock` deprecation warnings are resolved in current code by using an internal monotonic timer in `components/DiscoBall.jsx`.
+- `EXGL: gl.pixelStorei() doesn't support this parameter yet!` comes from Expo GL native internals, not app code.
+- In this project's current Disco Ball scene (no external texture upload path), this EXGL warning is non-blocking and can be safely ignored.
 
 ---
 
