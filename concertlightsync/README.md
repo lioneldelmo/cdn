@@ -1,6 +1,6 @@
 # Concert Light Sync
 
-![Version](https://img.shields.io/badge/version-1.0.4-FF6B00?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.5-FF6B00?style=flat-square)
 ![Platform](https://img.shields.io/badge/platform-iOS%20%7C%20Android-blue?style=flat-square)
 ![Expo](https://img.shields.io/badge/Expo-SDK%2054-4C97FB?style=flat-square)
 ![React Native](https://img.shields.io/badge/React%20Native-0.81-61DAFB?style=flat-square)
@@ -57,7 +57,15 @@ Concert Light Sync was built for one purpose: making live music more immersive. 
 - Adaptive beat-onset detection (slope + baseline threshold + refractory window)
 - Graceful fallback to ambient level 0.25 if mic permission is denied
 
-### New in v1.0.4 (Current Branch)
+### New in v1.0.5 (Current Branch)
+- **Production release pipeline hardening** — Added platform-specific store build pipelines that enforce a strict order: local native release compile -> version sync -> compliance validation -> EAS cloud build.
+- **Store submission split by platform** — Added dedicated submission flows for App Store and Google Play so submit operations remain explicit and independently runnable.
+- **Automated compliance gate** — Added `scripts/pre-submit-check.js` and integrated it into build/submit scripts. It validates version alignment, iOS permission strings, AdMob app IDs, Android minification settings, Android package/version/permissions, and privacy policy presence before upload.
+- **Android native build stability fix** — Updated Android release compile flow to clear stale `.cxx`/autolinking artifacts and run `:app:generateCodegenArtifactsFromSchema` before `:app:assembleRelease`, resolving Ninja/CMake codegen directory failures.
+- **Release docs overhaul** — Replaced deployment transcript docs with a structured release playbook in `README_DEPLOYMENT.md`, and added a Release Day checklist in this README for quick execution.
+- **Script compatibility aliases preserved** — Kept `build:ios`, `build:android`, `submit:ios`, and `submit:android` mapped to new store-oriented commands to avoid breaking existing workflows.
+
+### New in v1.0.4
 - **Beat intelligence (onset detection)** — visuals now react to detected beat transients, not only raw loudness.
 - **Beat controls** — Beat Accent slider + Beat On/Off toggle in the control panel, with AsyncStorage persistence.
 - **Scene bundles** — save your complete setup (mode, color, brightness, sensitivity, beat settings, marquee settings, icon/glyph state) as reusable bundles.
@@ -234,7 +242,7 @@ Key settings in `app.json`:
   "expo": {
     "name": "Concert Light Sync",
     "slug": "concert-light-sync",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "orientation": "portrait",
     "newArchEnabled": true,
     "ios": {
@@ -275,6 +283,25 @@ Audio polls at 20Hz. If the level were stored in React state, every update would
 
 ### Gesture composition
 The root gesture is a `Composed` gesture wrapping a `LongPress` and a `Pan`. This lets both gestures coexist: a slow pan triggers swipe mode cycling, while a long stationary press triggers screen lock — without conflict.
+
+---
+
+## Release Day Checklist
+
+Use the full deployment playbook in [README_DEPLOYMENT.md](README_DEPLOYMENT.md).
+
+Quick release sequence:
+
+1. `npm run build:ios:store`
+2. `npm run submit:ios:store`
+3. `npm run build:android:store`
+4. `npm run submit:android:store`
+
+Minimum pre-submit gates:
+
+- `npm run pre-submit-check` passes.
+- App Store Connect metadata and privacy details are complete.
+- Google Play Data safety, content rating, ads disclosure, and policy fields are complete.
 
 ---
 
