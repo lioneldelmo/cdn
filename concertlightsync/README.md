@@ -1,6 +1,6 @@
 # Concert Light Sync
 
-![Version](https://img.shields.io/badge/version-1.0.5-FF6B00?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.6-FF6B00?style=flat-square)
 ![Platform](https://img.shields.io/badge/platform-iOS%20%7C%20Android-blue?style=flat-square)
 ![Expo](https://img.shields.io/badge/Expo-SDK%2054-4C97FB?style=flat-square)
 ![React Native](https://img.shields.io/badge/React%20Native-0.81-61DAFB?style=flat-square)
@@ -80,7 +80,15 @@ If you're in the crowd, this is your light stick, your atmosphere, and your mome
 - Adaptive beat-onset detection (slope + baseline threshold + refractory window)
 - Graceful fallback to ambient level 0.25 if mic permission is denied
 
-### New in v1.0.5 (Current Branch)
+### New in v1.0.6 (Current Branch)
+- **Deep linking support** — Added app deep linking flows (including Android app links) so Concert Light Sync can open directly to in-app destinations from shared URLs.
+- **Bundle sharing reliability improvements** — Fixed edge cases in the bundle share/import flow to make sharing current scenes more dependable across devices.
+- **Disco Ball and canvas visual refinements** — Updated the 3D Disco Ball and main light canvas rendering for smoother visuals and more consistent real-time behavior.
+- **Audio reactivity tuning** — Improved microphone-reactive signal handling so visual responses feel cleaner and more stable in loud venue conditions.
+- **UI polish and navigation cleanup** — Refined side drawer/about surfaces and removed non-essential on-screen status clutter for a cleaner live-use experience.
+- **Expanded curated bundles** — Added two new curated bundles to the library so users can apply ready-made looks faster.
+
+### New in v1.0.5
 - **Production release pipeline hardening** — Added platform-specific store build pipelines that enforce a strict order: local native release compile -> version sync -> compliance validation -> EAS cloud build.
 - **Store submission split by platform** — Added dedicated submission flows for App Store and Google Play so submit operations remain explicit and independently runnable.
 - **Automated compliance gate** — Added `scripts/pre-submit-check.js` and integrated it into build/submit scripts. It validates version alignment, iOS permission strings, AdMob app IDs, Android minification settings, Android package/version/permissions, and privacy policy presence before upload.
@@ -270,7 +278,7 @@ Key settings in `app.json`:
   "expo": {
     "name": "Concert Light Sync",
     "slug": "concert-light-sync",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "orientation": "portrait",
     "newArchEnabled": true,
     "ios": {
