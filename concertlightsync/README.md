@@ -1,6 +1,6 @@
 # Concert Light Sync
 
-![Version](https://img.shields.io/badge/version-1.0.6-FF6B00?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.7-FF6B00?style=flat-square)
 ![Platform](https://img.shields.io/badge/platform-iOS%20%7C%20Android-blue?style=flat-square)
 ![Expo](https://img.shields.io/badge/Expo-SDK%2054-4C97FB?style=flat-square)
 ![React Native](https://img.shields.io/badge/React%20Native-0.81-61DAFB?style=flat-square)
@@ -80,7 +80,13 @@ If you're in the crowd, this is your light stick, your atmosphere, and your mome
 - Adaptive beat-onset detection (slope + baseline threshold + refractory window)
 - Graceful fallback to ambient level 0.25 if mic permission is denied
 
-### New in v1.0.6 (Current Branch)
+### New in Version 1.0.7
+- **Marquee in Rainbow mode** — Wave marquee now displays in Rainbow mode with color cycling for additional visual variety.
+- **MarqueeText rendering updates** — Enhanced MarqueeText component for improved dot-matrix animation performance and consistency.
+- **Platform-specific AdMob configuration** — Corrected banner Ad Unit IDs by platform to ensure proper ad serving on iOS and Android.
+- **Bundle QR code sharing fixes** — Improved reliability of the bundle sharing flow via QR code to prevent payload corruption and ensure smooth scene transfer across devices.
+
+### New in v1.0.6
 - **Deep linking support** — Added app deep linking flows (including Android app links) so Concert Light Sync can open directly to in-app destinations from shared URLs.
 - **Bundle sharing reliability improvements** — Fixed edge cases in the bundle share/import flow to make sharing current scenes more dependable across devices.
 - **Disco Ball and canvas visual refinements** — Updated the 3D Disco Ball and main light canvas rendering for smoother visuals and more consistent real-time behavior.
@@ -278,7 +284,7 @@ Key settings in `app.json`:
   "expo": {
     "name": "Concert Light Sync",
     "slug": "concert-light-sync",
-    "version": "1.0.6",
+    "version": "1.0.7",
     "orientation": "portrait",
     "newArchEnabled": true,
     "ios": {
