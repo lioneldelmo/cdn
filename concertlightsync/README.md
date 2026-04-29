@@ -1,6 +1,6 @@
 # Concert Light Sync
 
-![Version](https://img.shields.io/badge/version-1.0.7-FF6B00?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.8-FF6B00?style=flat-square)
 ![Platform](https://img.shields.io/badge/platform-iOS%20%7C%20Android-blue?style=flat-square)
 ![Expo](https://img.shields.io/badge/Expo-SDK%2054-4C97FB?style=flat-square)
 ![React Native](https://img.shields.io/badge/React%20Native-0.81-61DAFB?style=flat-square)
@@ -79,6 +79,15 @@ If you're in the crowd, this is your light stick, your atmosphere, and your mome
 - Exponential moving average smoothing (α=0.3) prevents jitter
 - Adaptive beat-onset detection (slope + baseline threshold + refractory window)
 - Graceful fallback to ambient level 0.25 if mic permission is denied
+
+### New in Version 1.0.8
+- **3D K-pop light stick** — K-pop mode now renders a full Three.js/WebGL 3D light stick (`KpopStick3D.jsx`) with a rotating mirrored ball, glowing handle rings, and audio-reactive intensity, replacing the previous flat wave visualization.
+- **Adaptive audio floor** — `AudioReactivity` no longer uses a fixed dBFS floor. It runs a 2.5-second calibration on startup (and on demand) then continuously follows the ambient noise level, so the meter self-tunes to any venue without manual adjustment.
+- **VU Meter profiles** — Meter mode gains three signal-weighting profiles: **RMS** (average loudness), **Hybrid** (balanced), and **Peak** (instant transients). Tap the new "Profile" button to cycle through them; the selection persists across sessions and is saved in scene bundles.
+- **Recalibrate Mic** — A new "Recalibrate Mic" button appears in the control panel when Meter mode is active. Tapping it triggers a fresh 2.5-second calibration pass so the adaptive floor can re-anchor to the current room noise.
+- **Rainbow mode visual overhaul** — Rainbow mode now features a mirrored-tile disco ball with 7 expanding ROYGBIV ring animations and blinking spectral accent dots for a more dynamic, concert-ready look.
+- **Scene bundles include meter profile** — The active VU Meter profile (`meterPeakBlend`) is now saved and restored as part of scene bundles.
+- **Reduced lock gesture delay** — The long-press duration to trigger screen lock has been lowered for faster, more reliable activation in crowded venues.
 
 ### New in Version 1.0.7
 - **Marquee in Rainbow mode** — Wave marquee now displays in Rainbow mode with color cycling for additional visual variety.
@@ -284,7 +293,7 @@ Key settings in `app.json`:
   "expo": {
     "name": "Concert Light Sync",
     "slug": "concert-light-sync",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "orientation": "portrait",
     "newArchEnabled": true,
     "ios": {
