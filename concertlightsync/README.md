@@ -1,6 +1,6 @@
 # Concert Light Sync
 
-![Version](https://img.shields.io/badge/version-1.0.8-FF6B00?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.9-FF6B00?style=flat-square)
 ![Platform](https://img.shields.io/badge/platform-iOS%20%7C%20Android-blue?style=flat-square)
 ![Expo](https://img.shields.io/badge/Expo-SDK%2054-4C97FB?style=flat-square)
 ![React Native](https://img.shields.io/badge/React%20Native-0.81-61DAFB?style=flat-square)
@@ -79,6 +79,15 @@ If you're in the crowd, this is your light stick, your atmosphere, and your mome
 - Exponential moving average smoothing (α=0.3) prevents jitter
 - Adaptive beat-onset detection (slope + baseline threshold + refractory window)
 - Graceful fallback to ambient level 0.25 if mic permission is denied
+
+### New in Version 1.0.9
+- **Shake to cycle colors** — Shake the device to instantly cycle through 7 preset colors (White, Pink, Yellow, Green, Blue, Red, Purple) without opening the color picker. Uses the accelerometer via `expo-sensors`; disabled when the screen is locked.
+- **In-mode color buttons** — Light Stick and K-pop modes now display a dedicated color-cycle button (glowing sphere with halo and specular highlight) that cycles colors with haptic feedback, letting you change color without leaving the mode.
+- **Disco Ball logo polish** — The overlay icon in Disco Ball mode now renders at full opacity at all times (no more opacity pulsing), scales with audio, picks up the selected accent color, and has a soft glow halo radiating behind it.
+- **Control panel full-screen dismiss fix** — The slide-away animation now uses the actual device screen height instead of a hard-coded 500 px offset, so the panel exits cleanly on all screen sizes.
+- **Ad banner glassmorphic card** — The ad banner is now wrapped in a frosted-glass card with rounded corners, a subtle border, and proper horizontal padding for a more polished appearance.
+- **Icon picker ordering** — Black Star icon now appears before the Quarter Note and Beamed Note in the icon picker grid.
+- **New dependency: expo-sensors** — Added for accelerometer-based shake detection.
 
 ### New in Version 1.0.8
 - **3D K-pop light stick** — K-pop mode now renders a full Three.js/WebGL 3D light stick (`KpopStick3D.jsx`) with a rotating mirrored ball, glowing handle rings, and audio-reactive intensity, replacing the previous flat wave visualization.
@@ -167,6 +176,7 @@ If you're in the crowd, this is your light stick, your atmosphere, and your mome
 | Gestures | react-native-gesture-handler | ~2.28.0 |
 | Audio | expo-audio | ~1.1.1 |
 | Haptics | expo-haptics | ~15.0.8 |
+| Sensors | expo-sensors | SDK 54 |
 | Gradients | expo-linear-gradient | ~15.0.8 |
 | Worklets | react-native-worklets | ^0.5.1 |
 | Navigation | @react-navigation/native-stack | ^7.14.4 |
@@ -293,7 +303,7 @@ Key settings in `app.json`:
   "expo": {
     "name": "Concert Light Sync",
     "slug": "concert-light-sync",
-    "version": "1.0.8",
+    "version": "1.0.9",
     "orientation": "portrait",
     "newArchEnabled": true,
     "ios": {
