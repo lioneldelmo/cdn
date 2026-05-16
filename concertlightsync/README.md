@@ -1,6 +1,6 @@
 # Concert Light Sync
 
-![Version](https://img.shields.io/badge/version-1.0.9-FF6B00?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.10-FF6B00?style=flat-square)
 ![Platform](https://img.shields.io/badge/platform-iOS%20%7C%20Android-blue?style=flat-square)
 ![Expo](https://img.shields.io/badge/Expo-SDK%2054-4C97FB?style=flat-square)
 ![React Native](https://img.shields.io/badge/React%20Native-0.81-61DAFB?style=flat-square)
@@ -67,7 +67,7 @@ If you're in the crowd, this is your light stick, your atmosphere, and your mome
 - **Long-press marquee (5s)** — edit the scrolling message displayed in Wave mode
 - **Tap canvas** — trigger a one-shot audio pulse (tap-to-simulate, no mic required)
 - **Color swatch** — opens a full HSV color picker with 7 presets
-- **Icon picker** — choose a custom icon displayed on the canvas; tap once for single-select or tap multiple icons to enable auto-cycling; long-press any custom slot for 5 seconds to assign your own glyph or emoji; selection persists via AsyncStorage
+- **Icon picker** — choose a custom icon displayed on the canvas; tap once for single-select or tap multiple icons to enable auto-cycling; long-press any custom slot for 5 seconds to assign your own glyph, emoji, or gallery photo; selection persists via AsyncStorage
 - **Audio sensitivity slider** — drag to tune how strongly the visuals react to sound (0–100%); persists across sessions
 - **Brightness slider** — independent brightness control
 - **Dim UI** — fades the control panel to 7% opacity, keeping the light on without glare
@@ -79,6 +79,13 @@ If you're in the crowd, this is your light stick, your atmosphere, and your mome
 - Exponential moving average smoothing (α=0.3) prevents jitter
 - Adaptive beat-onset detection (slope + baseline threshold + refractory window)
 - Graceful fallback to ambient level 0.25 if mic permission is denied
+
+### New in Version 1.0.10
+- **Custom icon images from gallery** — Long-press any custom icon slot to open the new icon editor drawer. Switch to the "Image" tab to pick a photo from your device gallery; the image is cropped to a circle in a pinch-to-zoom, drag-to-reposition crop view and saved per slot. Requires `NSPhotoLibraryUsageDescription` permission on iOS.
+- **16 custom icon slots** — The icon grid now supports up to 16 custom slots (up from 4). Legacy preset icons (Quarter Note, Beamed Note, Diamond, etc.) are automatically remapped to slots 5–16 so existing saved scenes are preserved.
+- **Icon editor drawer** — Replaces the old text-input modal with a right-sliding drawer that has two tabs: **Text** (enter a glyph or emoji, up to 2 characters) and **Image** (pick from gallery with live circular crop preview).
+- **Contrast color for icons** — A new algorithm automatically selects a complementary color for the center icon so it stays readable against any user-chosen background color, using HSL hue rotation with achromatic fallback to black/white.
+- **New dependencies: expo-image-picker & expo-image-manipulator** — Added for gallery access and JPEG crop/resize at 600×600 px.
 
 ### New in Version 1.0.9
 - **Shake to cycle colors** — Shake the device to instantly cycle through 7 preset colors (White, Pink, Yellow, Green, Blue, Red, Purple) without opening the color picker. Uses the accelerometer via `expo-sensors`; disabled when the screen is locked.

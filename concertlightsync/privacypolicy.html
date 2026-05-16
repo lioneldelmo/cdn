@@ -97,7 +97,7 @@
   <main class="wrap">
     <section class="card">
       <h1>Privacy Policy</h1>
-      <p class="meta"><span class="brand">Concert Light Sync</span> &middot; Effective Date: March 6, 2026</p>
+      <p class="meta"><span class="brand">Concert Light Sync</span> &middot; Effective Date: May 15, 2026</p>
 
       <p>
         This Privacy Policy explains how Concert Light Sync ("we," "our," or "us") handles information when you use the Concert Light Sync mobile application (the "App").
@@ -107,13 +107,15 @@
       <p>The App may access the following information to provide core features:</p>
       <ul>
         <li><strong>Microphone input</strong>: used in real time to detect sound level/rhythm so visuals can react to music.</li>
-        <li><strong>Local preferences</strong> (e.g. selected icon, last-used mode): stored on-device via AsyncStorage and never transmitted externally.</li>
+        <li><strong>Photo library</strong>: accessed only when you explicitly choose to assign a custom image to an icon slot. Selected photos are cropped and saved locally on your device; they are never transmitted to our servers.</li>
+        <li><strong>Local preferences</strong> (e.g. selected icon, last-used mode, custom icon images): stored on-device via AsyncStorage/local storage and never transmitted externally.</li>
         <li><strong>Basic device/app data from third-party ad services</strong>: when ads are shown, third-party providers may process identifiers, diagnostics, and usage signals under their own policies.</li>
       </ul>
 
       <h2>2. How We Use Information</h2>
       <ul>
         <li>To power audio-reactive lighting effects.</li>
+        <li>To display custom images you assign to icon slots on the light canvas.</li>
         <li>To display in-app advertising and support app operation.</li>
         <li>To diagnose crashes and improve stability/performance.</li>
       </ul>
@@ -121,6 +123,11 @@
       <h2>3. Microphone Permission</h2>
       <p>
         The App requests microphone access only for audio-reactive functionality. If permission is denied, related effects may run in fallback mode with reduced reactivity.
+      </p>
+
+      <h2>3a. Photo Library Permission</h2>
+      <p>
+        The App requests photo library access only when you choose to assign a custom image to an icon slot. Access is never requested automatically; it is always user-initiated. Selected images are cropped to 600&times;600&nbsp;px and stored locally on your device. If permission is denied, the text/emoji icon editor remains fully functional.
       </p>
 
       <h2>4. Advertising and Third-Party Services</h2>
@@ -157,6 +164,7 @@
       <h2>10. Your Choices</h2>
       <ul>
         <li>You can deny microphone permission in device settings.</li>
+        <li>You can deny photo library permission in device settings; the text/emoji icon editor continues to work without it.</li>
         <li>You can limit ad personalization through your platform privacy settings (where available).</li>
       </ul>
 
