@@ -1,6 +1,6 @@
 # Concert Light Sync
 
-![Version](https://img.shields.io/badge/version-1.0.10-FF6B00?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.11-FF6B00?style=flat-square)
 ![Platform](https://img.shields.io/badge/platform-iOS%20%7C%20Android-blue?style=flat-square)
 ![Expo](https://img.shields.io/badge/Expo-SDK%2054-4C97FB?style=flat-square)
 ![React Native](https://img.shields.io/badge/React%20Native-0.81-61DAFB?style=flat-square)
@@ -79,6 +79,9 @@ If you're in the crowd, this is your light stick, your atmosphere, and your mome
 - Exponential moving average smoothing (α=0.3) prevents jitter
 - Adaptive beat-onset detection (slope + baseline threshold + refractory window)
 - Graceful fallback to ambient level 0.25 if mic permission is denied
+
+### New in Version 1.0.11
+- **Ad content rating enforcement** — The Google Mobile Ads SDK now applies a `MaxAdContentRating.G` request configuration before initialization, ensuring only general-audience (family-safe) ads are served across all placements.
 
 ### New in Version 1.0.10
 - **Custom icon images from gallery** — Long-press any custom icon slot to open the new icon editor drawer. Switch to the "Image" tab to pick a photo from your device gallery; the image is cropped to a circle in a pinch-to-zoom, drag-to-reposition crop view and saved per slot. Requires `NSPhotoLibraryUsageDescription` permission on iOS.
