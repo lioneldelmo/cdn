@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Inspector - Professional Hardware Diagnostics for Developers</title>
+    <meta name="description" content="Extract hardware identifiers and system diagnostics with a beautiful, privacy-first utility. Available on iOS and Android.">
+    <meta name="theme-color" content="#0A0A0F">
+    <link rel="icon" href="./assets/favicon.png" type="image/png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-dark-bg: #0A0A0F;
+            --color-light-bg: #EFF3FB;
+
+            --color-dark-card: rgba(255, 255, 255, 0.06);
+            --color-light-card: rgba(255, 255, 255, 0.80);
+
+            --color-dark-border: rgba(255, 255, 255, 0.12);
+            --color-light-border: rgba(0, 0, 0, 0.07);
+
+            --color-dark-text: #E8E8F0;
+            --color-light-text: #1A1A2E;
+
+            --color-dark-text-secondary: rgba(232, 232, 240, 0.50);
+            --color-light-text-secondary: rgba(26, 26, 46, 0.50);
+
+            --color-dark-accent: #4FC3F7;
+            --color-light-accent: #007AFF;
+
+            --color-green: #4CAF50;
+            --color-amber: #FFA726;
+            --color-red: #EF5350;
+        }
+
+        body.dark {
+            --bg: var(--color-dark-bg);
+            --card: var(--color-dark-card);
+            --border: var(--color-dark-border);
+            --text: var(--color-dark-text);
+            --text-secondary: var(--color-dark-text-secondary);
+            --accent: var(--color-dark-accent);
+        }
+
+        body.light {
+            --bg: var(--color-light-bg);
+            --card: var(--color-light-card);
+            --border: var(--color-light-border);
+            --text: var(--color-light-text);
+            --text-secondary: var(--color-light-text-secondary);
+            --accent: var(--color-light-accent);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                color-scheme: dark;
+            }
+            body:not(.light) {
+                --bg: var(--color-dark-bg);
+                --card: var(--color-dark-card);
+                --border: var(--color-dark-border);
+                --text: var(--color-dark-text);
+                --text-secondary: var(--color-dark-text-secondary);
+                --accent: var(--color-dark-accent);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            body {
+                color-scheme: light;
+            }
+            body:not(.dark) {
+                --bg: var(--color-light-bg);
+                --card: var(--color-light-card);
+                --border: var(--color-light-border);
+                --text: var(--color-light-text);
+                --text-secondary: var(--color-light-text-secondary);
+                --accent: var(--color-light-accent);
+            }
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            line-height: 1.6;
+        }
+
+        /* Header / Navigation */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            background-color: rgba(10, 10, 15, 0.7);
+            border-bottom: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        body.light header {
+            background-color: rgba(239, 243, 251, 0.7);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text);
+            transition: opacity 0.2s ease;
+        }
+
+        .header-brand:hover {
+            opacity: 0.8;
+        }
+
+        .header-brand-icon {
+            font-size: 24px;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 18px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s ease;
+            padding: 8px;
+        }
+
+        .theme-toggle:hover {
+            opacity: 1;
+        }
+
+        /* Hero Section */
+        .hero {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .hero-icon {
+            font-size: 80px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .hero-title {
+            font-size: 48px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            max-width: 600px;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 16px;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 32px;
+            border-radius: 12px;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: white;
+            background: var(--accent);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(79, 195, 247, 0.3);
+        }
+
+        .cta-button-secondary {
+            background: transparent;
+            border: 1.5px solid var(--accent);
+            color: var(--accent);
+        }
+
+        .cta-button-secondary:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Section Header */
+        .section-header {
+            max-width: 1200px;
+            margin: 80px auto 48px;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 36px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 12px;
+        }
+
+        .section-description {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px 80px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            padding: 32px;
+            border-radius: 20px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.15);
+            pointer-events: none;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent);
+            box-shadow: 0 16px 40px rgba(79, 195, 247, 0.2);
+        }
+
+        body.light .feature-card:hover {
+            box-shadow: 0 16px 40px rgba(0, 122, 255, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 40px;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .feature-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--accent);
+        }
+
+        .feature-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Use Cases Section */
+        .use-cases {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .use-case-card {
+            padding: 28px;
+            border-radius: 16px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+        }
+
+        .use-case-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+        }
+
+        .use-case-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .use-case-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .use-case-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Privacy Pledge */
+        .privacy-pledge {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .privacy-badge {
+            display: inline-block;
+            padding: 16px 24px;
+            border-radius: 12px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            margin-bottom: 24px;
+            font-size: 14px;
+            color: var(--accent);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .privacy-pledge-title {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+        .privacy-pledge-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            margin-top: 32px;
+            text-align: left;
+        }
+
+        .privacy-item {
+            padding: 20px;
+            border-radius: 12px;
+            background: transparent;
+            border: 1px solid var(--border);
+        }
+
+        .privacy-item-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .privacy-item-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .privacy-item-text {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* FAQs Section */
+        .faqs {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 80px 20px;
+        }
+
+        .faq-item {
+            margin-bottom: 20px;
+            border-radius: 12px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            border-color: var(--accent);
+        }
+
+        .faq-question {
+            padding: 20px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+
+        .faq-question:hover {
+            color: var(--accent);
+        }
+
+        .faq-icon {
+            font-size: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            padding: 0 20px;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+            padding: 0 20px 20px;
+        }
+
+        .faq-text {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--card);
+            border-top: 1px solid var(--border);
+            padding: 48px 20px;
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 14px;
+            transition: opacity 0.2s ease;
+        }
+
+        .footer-link:hover {
+            opacity: 0.8;
+        }
+
+        .footer-text {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 32px;
+            }
+
+            .hero-subtitle {
+                font-size: 16px;
+            }
+
+            .section-title {
+                font-size: 28px;
+            }
+
+            .hero {
+                padding: 48px 20px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-nav {
+                gap: 16px;
+            }
+        }
+
+        /* Scroll Animation */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scroll-reveal {
+            animation: slideIn 0.6s ease-out forwards;
+        }
+
+        .scroll-hidden {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+    </style>
+</head>
+<body class="dark">
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <a href="#" class="header-brand">
+                <span class="header-brand-icon">🔍</span>
+                <span>Device Inspector</span>
+            </a>
+            <nav class="header-nav">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-icon">🔍</div>
+        <h1 class="hero-title">Professional Hardware Diagnostics at Your Fingertips</h1>
+        <p class="hero-subtitle">Extract hardware identifiers, system diagnostics, and export comprehensive device reports with a beautiful, privacy-first utility.</p>
+        <div class="hero-cta">
+            <a href="#ios-download" class="cta-button">📱 Download for iOS</a>
+            <a href="#android-download" class="cta-button cta-button-secondary">🤖 Get on Android</a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section>
+        <div class="section-header">
+            <h2 class="section-title">Comprehensive Diagnostics</h2>
+            <p class="section-description">Access 9 essential diagnostic modules covering identity, power, storage, network, and security.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card scroll-hidden">
+                <span class="feature-icon">🔐</span>
+                <h3 class="feature-title">Identity Vault</h3>
+                <p class="feature-description">IDFA, AAID, Android ID, IDFV, Bundle ID, tracking permission status, and install referrer data.</p>
+            </div>
+
+            <div class="feature-card scroll-hidden">
+                <span class="feature-icon">⚡</span>
+                <h3 class="feature-title">Power Lab</h3>
+                <p class="feature-description">Real-time battery percentage, charging state detection, and low power mode status.</p>
+            </div>
+
+            <div class="feature-card scroll-hidden">
+                <span class="feature-icon">💾</span>
+                <h3 class="feature-title">Storage Analyst</h3>
+                <p class="feature-description">Visual disk usage breakdown with progress bars showing free, used, and total storage.</p>
+            </div>
+
+            <div class="feature-card scroll-hidden">
+                <span class="feature-icon">📱</span>
+                <h3 class="feature-title">Hardware Details</h3>
+                <p class="feature-description">Device name, model, brand, manufacturer, RAM, and year class estimation.</p>
+            </div>
+
+            <div class="feature-card scroll-hidden">
+                <span class="feature-icon">🖥️</span>
+                <h3 class="feature-title">Device Details</h3>
+                <p class="feature-description">System uptime, root/jailbreak status, Dynamic Island detection, and installation timestamps.</p>
+            </div>
+
+            <div class="feature-card scroll-hidden">
+                <span class="feature-icon">📶</span>
+                <h3 class="feature-title">Network & Connectivity</h3>
+                <p class="feature-description">Connection type, internet reachability, IP address, airplane mode, and SSID information.</p>
+            </div>
+
+            <div class="feature-card scroll-hidden">
+                <span class="feature-icon">📡</span>
+                <h3 class="feature-title">Carrier & SIM</h3>
+                <p class="feature-description">Carrier name, MCC/MNC codes, ISO country code, and VoIP capability status.</p>
+            </div>
+
+            <div class="feature-card scroll-hidden">
+                <span class="feature-icon">🔒</span>
+                <h3 class="feature-title">Security & Lock Status</h3>
+                <p class="feature-description">Bootloader status, device lock status, and biometric authentication availability.</p>
+            </div>
+
+            <div class="feature-card scroll-hidden">
+                <span class="feature-icon">🛠</span>
+                <h3 class="feature-title">Deep Diagnostics</h3>
+                <p class="feature-description">CPU architecture, OS build fingerprint, internal build ID (unlock by tapping OS Version 7×).</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases Section -->
+    <section>
+        <div class="section-header">
+            <h2 class="section-title">Perfect For Developers</h2>
+            <p class="section-description">Real-world scenarios where Device Inspector becomes indispensable.</p>
+        </div>
+        <div class="use-cases">
+            <div class="use-case-card scroll-hidden">
+                <div class="use-case-icon">🧪</div>
+                <h3 class="use-case-title">QA & Testing</h3>
+                <p class="use-case-description">Verify device capabilities and hardware specifications during quality assurance testing and device compatibility checks.</p>
+            </div>
+
+            <div class="use-case-card scroll-hidden">
+                <div class="use-case-icon">🐛</div>
+                <h3 class="use-case-title">Bug Reproduction</h3>
+                <p class="use-case-description">Quickly capture complete device diagnostics when reporting or investigating platform-specific bugs.</p>
+            </div>
+
+            <div class="use-case-card scroll-hidden">
+                <div class="use-case-icon">📊</div>
+                <h3 class="use-case-title">Analytics & Insights</h3>
+                <p class="use-case-description">Export timestamped JSON reports for detailed hardware and software analysis across device fleets.</p>
+            </div>
+
+            <div class="use-case-card scroll-hidden">
+                <div class="use-case-icon">🔐</div>
+                <h3 class="use-case-title">Privacy Audits</h3>
+                <p class="use-case-description">Verify tracking permissions and advertising ID status to ensure compliance with privacy regulations.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Privacy Pledge -->
+    <section class="privacy-pledge">
+        <div class="privacy-badge">🛡️ PRIVACY-FIRST APPROACH</div>
+        <h2 class="privacy-pledge-title">Your Data Stays On Your Device</h2>
+        <p class="section-description" style="max-width: 700px; margin: 0 auto 32px;">Device Inspector respects your privacy. All diagnostics are read locally and never transmitted to external servers. The app is free and supported by a Google AdMob banner.</p>
+
+        <div class="privacy-pledge-items">
+            <div class="privacy-item">
+                <div class="privacy-item-icon">✓</div>
+                <div class="privacy-item-title">Diagnostics Stay Local</div>
+                <p class="privacy-item-text">Diagnostic readings are never transmitted or stored on servers.</p>
+            </div>
+            <div class="privacy-item">
+                <div class="privacy-item-icon">✓</div>
+                <div class="privacy-item-title">No Analytics</div>
+                <p class="privacy-item-text">No analytics SDKs, crash reporters, or telemetry.</p>
+            </div>
+            <div class="privacy-item">
+                <div class="privacy-item-icon">✓</div>
+                <div class="privacy-item-title">You Control Sharing</div>
+                <p class="privacy-item-text">Export reports only when you choose, via native share.</p>
+            </div>
+            <div class="privacy-item">
+                <div class="privacy-item-icon">✓</div>
+                <div class="privacy-item-title">Transparent</div>
+                <p class="privacy-item-text">Comprehensive privacy policy available anytime.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQs Section -->
+    <section>
+        <div class="section-header">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+        </div>
+        <div class="faqs">
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>Is Device Inspector available for both iOS and Android?</span>
+                    <span class="faq-icon">▼</span>
+                </button>
+                <div class="faq-answer">
+                    <p class="faq-text">Yes! Device Inspector is fully available on both iOS and Android platforms with platform-specific features. The app is optimized for each platform and uses native APIs to ensure the most accurate diagnostics.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>Does it work with Expo Go?</span>
+                    <span class="faq-icon">▼</span>
+                </button>
+                <div class="faq-answer">
+                    <p class="faq-text">Yes! Device Inspector is fully compatible with Expo Go. All core features work seamlessly. Some advanced features gracefully degrade with "N/A" status when unsupported by Expo Go, ensuring reliability without errors.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>Can I export my device diagnostics?</span>
+                    <span class="faq-icon">▼</span>
+                </button>
+                <div class="faq-answer">
+                    <p class="faq-text">Absolutely! Tap "Share JSON Report" to generate a timestamped JSON file with comprehensive diagnostics. You can share it via AirDrop, email, or save it locally. The app never uploads this data—you have complete control.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>How do I copy values to my clipboard?</span>
+                    <span class="faq-icon">▼</span>
+                </button>
+                <div class="faq-answer">
+                    <p class="faq-text">Long-press any value (like IDFA, Device Name, or IP Address) for approximately 0.4 seconds. You'll see a "Copied ✓" toast notification confirming the value is in your clipboard, ready to paste anywhere.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>What is Developer Mode and how do I unlock it?</span>
+                    <span class="faq-icon">▼</span>
+                </button>
+                <div class="faq-answer">
+                    <p class="faq-text">Developer Mode reveals the "Deep Diagnostics" card with advanced information like CPU architecture and build fingerprints. To unlock it, navigate to the Software section and tap the "OS Version" row exactly 7 times. A progress counter shows your tap count.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>Does Device Inspector collect or transmit my data?</span>
+                    <span class="faq-icon">▼</span>
+                </button>
+                <div class="faq-answer">
+                    <p class="faq-text">Your diagnostics are never transmitted — they are read locally on your device and only leave it if you export a report yourself. There are no analytics libraries or telemetry. The app shows a Google AdMob banner, which may use your advertising ID and basic device information to serve ads (on iOS, only if you allow tracking). See the privacy policy for details.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>How do I switch between Dark and Light themes?</span>
+                    <span class="faq-icon">▼</span>
+                </button>
+                <div class="faq-answer">
+                    <p class="faq-text">Open the hamburger menu (☰) in the top-left corner and scroll to the "Appearance" section at the bottom. Choose System (follows device settings), Light, or Dark mode. Your preference is saved automatically and persists between sessions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="./privacypolicy.html" class="footer-link">Privacy Policy</a>
+                <a href="#" class="footer-link">About</a>
+                <a href="#" class="footer-link">Contact</a>
+            </div>
+            <p class="footer-text">Device Inspector · v1.0.0 · © 2026 · Professional Hardware Diagnostics for Developers</p>
+        </div>
+    </footer>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        const body = document.body;
+
+        // Initialize theme from localStorage or system preference
+        function initTheme() {
+            const savedTheme = localStorage.getItem('device-inspector-theme');
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else {
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                applyTheme(prefersDark ? 'dark' : 'light');
+            }
+        }
+
+        function applyTheme(theme) {
+            body.className = theme;
+            themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+            localStorage.setItem('device-inspector-theme', theme);
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = body.className;
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            applyTheme(newTheme);
+        });
+
+        // Scroll Reveal Animation
+        const revealElements = document.querySelectorAll('.scroll-hidden');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('scroll-reveal');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        revealElements.forEach(el => observer.observe(el));
+
+        // FAQ Accordion
+        const faqQuestions = document.querySelectorAll('.faq-question');
+        faqQuestions.forEach(question => {
+            question.addEventListener('click', () => {
+                const faqItem = question.parentElement;
+                const isActive = faqItem.classList.contains('active');
+
+                // Close all other FAQ items
+                document.querySelectorAll('.faq-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+
+                // Toggle current item
+                if (!isActive) {
+                    faqItem.classList.add('active');
+                }
+            });
+        });
+
+        // Initialize on page load
+        initTheme();
+    </script>
+</body>
+</html>

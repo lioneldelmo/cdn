@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - Device Inspector</title>
+    <meta name="description" content="Device Inspector Privacy Policy - Learn how we protect your data and maintain your privacy.">
+    <meta name="theme-color" content="#0A0A0F">
+    <link rel="icon" href="./assets/favicon.png" type="image/png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-dark-bg: #0A0A0F;
+            --color-light-bg: #EFF3FB;
+
+            --color-dark-card: rgba(255, 255, 255, 0.06);
+            --color-light-card: rgba(255, 255, 255, 0.80);
+
+            --color-dark-border: rgba(255, 255, 255, 0.12);
+            --color-light-border: rgba(0, 0, 0, 0.07);
+
+            --color-dark-text: #E8E8F0;
+            --color-light-text: #1A1A2E;
+
+            --color-dark-text-secondary: rgba(232, 232, 240, 0.50);
+            --color-light-text-secondary: rgba(26, 26, 46, 0.50);
+
+            --color-dark-accent: #4FC3F7;
+            --color-light-accent: #007AFF;
+        }
+
+        body.dark {
+            --bg: var(--color-dark-bg);
+            --card: var(--color-dark-card);
+            --border: var(--color-dark-border);
+            --text: var(--color-dark-text);
+            --text-secondary: var(--color-dark-text-secondary);
+            --accent: var(--color-dark-accent);
+        }
+
+        body.light {
+            --bg: var(--color-light-bg);
+            --card: var(--color-light-card);
+            --border: var(--color-light-border);
+            --text: var(--color-light-text);
+            --text-secondary: var(--color-light-text-secondary);
+            --accent: var(--color-light-accent);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                color-scheme: dark;
+            }
+            body:not(.light) {
+                --bg: var(--color-dark-bg);
+                --card: var(--color-dark-card);
+                --border: var(--color-dark-border);
+                --text: var(--color-dark-text);
+                --text-secondary: var(--color-dark-text-secondary);
+                --accent: var(--color-dark-accent);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            body {
+                color-scheme: light;
+            }
+            body:not(.dark) {
+                --bg: var(--color-light-bg);
+                --card: var(--color-light-card);
+                --border: var(--color-light-border);
+                --text: var(--color-light-text);
+                --text-secondary: var(--color-light-text-secondary);
+                --accent: var(--color-light-accent);
+            }
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            line-height: 1.7;
+        }
+
+        /* Header / Navigation */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            background-color: rgba(10, 10, 15, 0.7);
+            border-bottom: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        body.light header {
+            background-color: rgba(239, 243, 251, 0.7);
+        }
+
+        .header-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            transition: opacity 0.2s ease;
+        }
+
+        .header-brand:hover {
+            opacity: 0.8;
+        }
+
+        .header-brand-icon {
+            font-size: 22px;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 18px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s ease;
+            padding: 8px;
+        }
+
+        .theme-toggle:hover {
+            opacity: 1;
+        }
+
+        .back-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 14px;
+            transition: opacity 0.2s ease;
+        }
+
+        .back-link:hover {
+            opacity: 0.8;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        /* Page Title */
+        .page-title {
+            font-size: 40px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+
+        .last-updated {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            font-style: italic;
+        }
+
+        /* Table of Contents */
+        .toc {
+            padding: 28px;
+            border-radius: 16px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            margin-bottom: 48px;
+        }
+
+        .toc-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .toc-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .toc-list li {
+            font-size: 14px;
+        }
+
+        .toc-list a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .toc-list a:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+
+        /* Section */
+        .policy-section {
+            margin-bottom: 48px;
+            scroll-margin-top: 100px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .section-icon {
+            font-size: 24px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .section-subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .section-body {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .section-body p {
+            margin-bottom: 16px;
+        }
+
+        .section-body strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .section-body ul,
+        .section-body ol {
+            margin-left: 24px;
+            margin-bottom: 16px;
+        }
+
+        .section-body li {
+            margin-bottom: 8px;
+        }
+
+        .highlight-box {
+            padding: 20px;
+            border-radius: 12px;
+            background: var(--card);
+            border-left: 4px solid var(--accent);
+            margin: 20px 0;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        /* Contact Section */
+        .contact-box {
+            padding: 32px;
+            border-radius: 16px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .contact-box-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .contact-box-text {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--card);
+            border-top: 1px solid var(--border);
+            padding: 32px 20px;
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .footer-text {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Print Styles */
+        @media print {
+            header {
+                display: none;
+            }
+
+            .container {
+                padding: 40px 20px;
+            }
+
+            .page-title {
+                font-size: 28px;
+            }
+
+            a {
+                color: inherit;
+                text-decoration: underline;
+            }
+
+            .toc {
+                break-inside: avoid;
+            }
+
+            .policy-section {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 20px;
+            }
+
+            .page-title {
+                font-size: 28px;
+            }
+
+            .section-title {
+                font-size: 20px;
+            }
+
+            .header-container {
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+<body class="dark">
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <a href="./index.html" class="header-brand">
+                <span class="header-brand-icon">🔍</span>
+                <span>Device Inspector</span>
+            </a>
+            <nav class="header-nav">
+                <a href="./index.html" class="back-link">← Back to Home</a>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1 class="page-title">Privacy Policy</h1>
+        <p class="last-updated">Last Updated: October 2026</p>
+
+        <!-- Table of Contents -->
+        <div class="toc">
+            <div class="toc-title">Contents</div>
+            <ul class="toc-list">
+                <li><a href="#data-collection">Data Collection</a></li>
+                <li><a href="#advertising-identifier">Advertising Identifier (IDFA / AAID)</a></li>
+                <li><a href="#exported-reports">Exported Reports</a></li>
+                <li><a href="#advertising">Advertising (Google AdMob)</a></li>
+                <li><a href="#analytics-tracking">No Analytics</a></li>
+                <li><a href="#contact">Contact & Questions</a></li>
+            </ul>
+        </div>
+
+        <!-- Section 1: Data Collection -->
+        <section class="policy-section" id="data-collection">
+            <div class="section-header">
+                <span class="section-icon">📋</span>
+                <h2 class="section-title">Data Collection</h2>
+            </div>
+            <div class="section-subtitle">How we handle your information</div>
+            <div class="section-body">
+                <p>Device Inspector has no servers and the developer does not collect your data. Diagnostic information is read locally on your device and stays within the app. The only data that leaves your device is what the Google AdMob ad SDK collects, as described under <a href="#advertising">Advertising</a>.</p>
+                <p>When you open Device Inspector, the app queries your device's hardware and software information using the native APIs provided by iOS and Android. This information includes:</p>
+                <ul>
+                    <li>Device model and brand information</li>
+                    <li>Operating system version and build details</li>
+                    <li>Battery and storage metrics</li>
+                    <li>Network connectivity status</li>
+                    <li>Locale and regional settings</li>
+                    <li>Biometric capabilities</li>
+                    <li>On Android: Android ID and install referrer; on iOS: identifier for vendor (IDFV)</li>
+                </ul>
+                <div class="highlight-box">
+                    <strong>Important:</strong> None of these diagnostic readings are sent to Device Inspector servers, to Expo servers, or to any third-party service. They are read locally on your device, and you have complete control over what information is accessed. The only third-party service in the app is the Google AdMob banner described under <a href="#advertising">Advertising</a>.
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Advertising Identifier -->
+        <section class="policy-section" id="advertising-identifier">
+            <div class="section-header">
+                <span class="section-icon">🔐</span>
+                <h2 class="section-title">Advertising Identifier (IDFA / AAID)</h2>
+            </div>
+            <div class="section-subtitle">Tracking permission and identifier retrieval</div>
+            <div class="section-body">
+                <p><strong>On iOS:</strong> Device Inspector requests tracking permission to display your IDFA (Identifier for Advertisers) in the app's Identity Vault section. If you allow tracking, the Google AdMob SDK may also use your IDFA to serve and measure ads.</p>
+                <p><strong>On Android:</strong> The app reads your AAID (Google Advertising ID) to display it in the Identity Vault. The Google AdMob SDK may also use your AAID to serve and measure ads, subject to your device's ad personalization settings.</p>
+                <div class="highlight-box">
+                    <strong>Permission Model:</strong> On iOS, you will see a system prompt asking "Allow Device Inspector to track your activity across other companies' apps and websites?" If you tap "Allow," the app can access your IDFA. If you deny or restrict tracking, the IDFA section shows "Not Permitted" rather than throwing an error.
+                </div>
+                <p>Device Inspector has no backend servers of its own. Apart from the AdMob SDK's use described under <a href="#advertising">Advertising</a>, neither identifier is transmitted anywhere.</p>
+            </div>
+        </section>
+
+        <!-- Section 3: Exported Reports -->
+        <section class="policy-section" id="exported-reports">
+            <div class="section-header">
+                <span class="section-icon">📤</span>
+                <h2 class="section-title">Exported Reports</h2>
+            </div>
+            <div class="section-subtitle">How your diagnostic reports are handled</div>
+            <div class="section-body">
+                <p>When you tap "Share JSON Report" at the bottom of the app, Device Inspector generates a timestamped JSON file containing a snapshot of your device's diagnostics. This file is generated locally on your device.</p>
+                <p>The app then opens your device's native share sheet, allowing you to choose where to send the report:</p>
+                <ul>
+                    <li>Save to Files (on-device)</li>
+                    <li>Share via AirDrop to another Apple device</li>
+                    <li>Send via email</li>
+                    <li>Upload to cloud storage (Google Drive, OneDrive, etc.)</li>
+                    <li>Share to messaging apps</li>
+                </ul>
+                <div class="highlight-box">
+                    <strong>Critical:</strong> Device Inspector does not upload this file anywhere. You have complete control over where the report goes. Any sharing happens through your device's native share system, and you must explicitly choose the destination.
+                </div>
+                <p>Exported JSON files contain comprehensive device diagnostics and should be treated as sensitive data, similar to system logs or device settings exports. Only share these files with trusted recipients or services.</p>
+            </div>
+        </section>
+
+        <!-- Section 4: Advertising -->
+        <section class="policy-section" id="advertising">
+            <div class="section-header">
+                <span class="section-icon">📢</span>
+                <h2 class="section-title">Advertising (Google AdMob)</h2>
+            </div>
+            <div class="section-subtitle">How the ad banner works</div>
+            <div class="section-body">
+                <p>Device Inspector is free and supported by a banner ad served by Google AdMob. To deliver, measure, and prevent fraud on ads, the AdMob SDK may collect:</p>
+                <ul>
+                    <li>Your advertising identifier (IDFA on iOS, AAID on Android)</li>
+                    <li>Device information such as model, operating system version, and language</li>
+                    <li>Approximate location derived from your IP address</li>
+                    <li>Ad interactions such as impressions and taps</li>
+                </ul>
+                <div class="highlight-box">
+                    <strong>Your Choices:</strong> On iOS, the IDFA is only available to AdMob if you allow tracking in the system prompt; you can change this anytime in Settings → Privacy &amp; Security → Tracking. Where required (e.g. EEA, UK), a consent form lets you choose whether ads are personalized. On Android, you can reset or delete your advertising ID in Settings → Privacy → Ads.
+                </div>
+                <p>Ad data is retained and deleted according to Google's policies; Device Inspector does not store it. The app is not directed to children under 13, and ad content is limited to the G rating. The diagnostic readings shown in the app and in exported reports are never shared with AdMob. Google's handling of this data is governed by the <a href="https://policies.google.com/privacy">Google Privacy Policy</a> and <a href="https://policies.google.com/technologies/partner-sites">How Google uses information from sites or apps that use its services</a>.</p>
+            </div>
+        </section>
+
+        <!-- Section 5: No Analytics -->
+        <section class="policy-section" id="analytics-tracking">
+            <div class="section-header">
+                <span class="section-icon">✓</span>
+                <h2 class="section-title">No Analytics</h2>
+            </div>
+            <div class="section-subtitle">What we don't do</div>
+            <div class="section-body">
+                <p>Apart from the ad banner above, Device Inspector contains:</p>
+                <ul>
+                    <li><strong>No analytics SDKs</strong> (no Firebase Analytics, Mixpanel, Amplitude, etc.)</li>
+                    <li><strong>No crash reporters</strong> (no Sentry, Bugsnag, Rollbar, etc.)</li>
+                    <li><strong>No telemetry systems</strong></li>
+                    <li><strong>No remote configuration services</strong></li>
+                </ul>
+                <div class="highlight-box">
+                    <strong>Your Usage Is Not Monitored by Us:</strong> We do not collect information about which features you use, how long you spend in the app, or whether you export reports.
+                </div>
+                <p>All diagnostics work offline. The only network requests the app makes are those of the AdMob SDK to load ads.</p>
+            </div>
+        </section>
+
+        <!-- Section 6: Contact -->
+        <section class="policy-section" id="contact">
+            <div class="section-header">
+                <span class="section-icon">📧</span>
+                <h2 class="section-title">Contact & Questions</h2>
+            </div>
+            <div class="section-subtitle">Get in touch about privacy</div>
+            <div class="section-body">
+                <p>If you have questions, concerns, or requests regarding this privacy policy or how Device Inspector handles your data, please reach out through the following channels:</p>
+                <ul>
+                    <li><strong>App Store:</strong> Contact the developer through the Device Inspector app store listing</li>
+                    <li><strong>Email:</strong> <a href="mailto:privacydeviceinspector@delmo.net">privacydeviceinspector@delmo.net</a></li>
+                </ul>
+                <p>We take privacy seriously and are committed to responding to privacy-related inquiries promptly.</p>
+            </div>
+        </section>
+
+        <!-- Contact Box -->
+        <div class="contact-box">
+            <h3 class="contact-box-title">Questions About Your Privacy?</h3>
+            <p class="contact-box-text">Device Inspector is built with privacy as the foundation. All diagnostics stay on your device and are never shared with anyone unless you export them yourself. The only data leaving your device is what the Google AdMob SDK uses to serve ads, as described above.</p>
+            <p class="contact-box-text">Email <a href="mailto:privacydeviceinspector@delmo.net">privacydeviceinspector@delmo.net</a>, visit the app store listing, or refer to the built-in Privacy Policy modal within the app.</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p class="footer-text">Device Inspector · v1.0.0 · © 2026 · Privacy-First Hardware Diagnostics</p>
+    </footer>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+
+        // Initialize theme from localStorage or system preference
+        function initTheme() {
+            const savedTheme = localStorage.getItem('device-inspector-theme');
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else {
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                applyTheme(prefersDark ? 'dark' : 'light');
+            }
+        }
+
+        function applyTheme(theme) {
+            body.className = theme;
+            themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+            localStorage.setItem('device-inspector-theme', theme);
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = body.className;
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            applyTheme(newTheme);
+        });
+
+        // Initialize on page load
+        initTheme();
+    </script>
+</body>
+</html>
