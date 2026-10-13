@@ -1,6 +1,6 @@
 # Concert Light Sync
 
-![Version](https://img.shields.io/badge/version-1.0.3-FF6B00?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.11-FF6B00?style=flat-square)
 ![Platform](https://img.shields.io/badge/platform-iOS%20%7C%20Android-blue?style=flat-square)
 ![Expo](https://img.shields.io/badge/Expo-SDK%2054-4C97FB?style=flat-square)
 ![React Native](https://img.shields.io/badge/React%20Native-0.81-61DAFB?style=flat-square)
@@ -20,6 +20,29 @@ Concert Light Sync was built for one purpose: making live music more immersive. 
 - Concert attendees who want to be part of the visual experience
 - Festival-goers creating crowd light shows
 - Anyone who wants a beautiful, responsive flashlight for live events
+
+---
+
+## Promotional Copy
+
+### Tagline
+**Feel the beat. Light the crowd. Own the moment.**
+
+### Short Promo (App Store / Product Hunt)
+Turn your phone into an audio-reactive concert light in seconds. Concert Light Sync listens to live music and transforms your screen into a vivid, high-brightness light show with immersive modes, smooth swipe controls, and one-handed dark-venue usability.
+
+### Full Promo (Website / Press Kit)
+Concert Light Sync is built for live music fans who want to become part of the show. From festivals and arenas to club nights and house parties, the app reacts to the sound around you in real time and turns your screen into a dynamic performance light.
+
+Choose from multiple visual modes including Strobe, Pulse, Rainbow, Wave, Candle, and a 3D Disco Ball. Fine-tune brightness, color, and audio sensitivity, then switch modes instantly with simple gestures designed for crowded, low-light environments. With smooth 60fps animations, haptic feedback, and a dimmable control UI, Concert Light Sync gives you bold visuals without distracting glare.
+
+If you're in the crowd, this is your light stick, your atmosphere, and your moment.
+
+### Social Captions
+- Your flashlight is now the light show. #ConcertLightSync
+- Built for festivals, clubs, and stadium nights. Swipe, glow, repeat.
+- Real-time audio-reactive visuals on your phone. No extra hardware needed.
+- Pick your color. Raise your phone. Match the music.
 
 ---
 
@@ -44,7 +67,7 @@ Concert Light Sync was built for one purpose: making live music more immersive. 
 - **Long-press marquee (5s)** — edit the scrolling message displayed in Wave mode
 - **Tap canvas** — trigger a one-shot audio pulse (tap-to-simulate, no mic required)
 - **Color swatch** — opens a full HSV color picker with 7 presets
-- **Icon picker** — choose a custom icon displayed on the canvas; tap once for single-select or tap multiple icons to enable auto-cycling; long-press any custom slot for 5 seconds to assign your own glyph or emoji; selection persists via AsyncStorage
+- **Icon picker** — choose a custom icon displayed on the canvas; tap once for single-select or tap multiple icons to enable auto-cycling; long-press any custom slot for 5 seconds to assign your own glyph, emoji, or gallery photo; selection persists via AsyncStorage
 - **Audio sensitivity slider** — drag to tune how strongly the visuals react to sound (0–100%); persists across sessions
 - **Brightness slider** — independent brightness control
 - **Dim UI** — fades the control panel to 7% opacity, keeping the light on without glare
@@ -54,7 +77,67 @@ Concert Light Sync was built for one purpose: making live music more immersive. 
 - Live microphone input via `expo-audio`
 - 20Hz polling rate balancing responsiveness and battery
 - Exponential moving average smoothing (α=0.3) prevents jitter
+- Adaptive beat-onset detection (slope + baseline threshold + refractory window)
 - Graceful fallback to ambient level 0.25 if mic permission is denied
+
+### New in Version 1.0.11
+- **Ad content rating enforcement** — The Google Mobile Ads SDK now applies a `MaxAdContentRating.G` request configuration before initialization, ensuring only general-audience (family-safe) ads are served across all placements.
+
+### New in Version 1.0.10
+- **Custom icon images from gallery** — Long-press any custom icon slot to open the new icon editor drawer. Switch to the "Image" tab to pick a photo from your device gallery; the image is cropped to a circle in a pinch-to-zoom, drag-to-reposition crop view and saved per slot. Requires `NSPhotoLibraryUsageDescription` permission on iOS.
+- **16 custom icon slots** — The icon grid now supports up to 16 custom slots (up from 4). Legacy preset icons (Quarter Note, Beamed Note, Diamond, etc.) are automatically remapped to slots 5–16 so existing saved scenes are preserved.
+- **Icon editor drawer** — Replaces the old text-input modal with a right-sliding drawer that has two tabs: **Text** (enter a glyph or emoji, up to 2 characters) and **Image** (pick from gallery with live circular crop preview).
+- **Contrast color for icons** — A new algorithm automatically selects a complementary color for the center icon so it stays readable against any user-chosen background color, using HSL hue rotation with achromatic fallback to black/white.
+- **New dependencies: expo-image-picker & expo-image-manipulator** — Added for gallery access and JPEG crop/resize at 600×600 px.
+
+### New in Version 1.0.9
+- **Shake to cycle colors** — Shake the device to instantly cycle through 7 preset colors (White, Pink, Yellow, Green, Blue, Red, Purple) without opening the color picker. Uses the accelerometer via `expo-sensors`; disabled when the screen is locked.
+- **In-mode color buttons** — Light Stick and K-pop modes now display a dedicated color-cycle button (glowing sphere with halo and specular highlight) that cycles colors with haptic feedback, letting you change color without leaving the mode.
+- **Disco Ball logo polish** — The overlay icon in Disco Ball mode now renders at full opacity at all times (no more opacity pulsing), scales with audio, picks up the selected accent color, and has a soft glow halo radiating behind it.
+- **Control panel full-screen dismiss fix** — The slide-away animation now uses the actual device screen height instead of a hard-coded 500 px offset, so the panel exits cleanly on all screen sizes.
+- **Ad banner glassmorphic card** — The ad banner is now wrapped in a frosted-glass card with rounded corners, a subtle border, and proper horizontal padding for a more polished appearance.
+- **Icon picker ordering** — Black Star icon now appears before the Quarter Note and Beamed Note in the icon picker grid.
+- **New dependency: expo-sensors** — Added for accelerometer-based shake detection.
+
+### New in Version 1.0.8
+- **3D K-pop light stick** — K-pop mode now renders a full Three.js/WebGL 3D light stick (`KpopStick3D.jsx`) with a rotating mirrored ball, glowing handle rings, and audio-reactive intensity, replacing the previous flat wave visualization.
+- **Adaptive audio floor** — `AudioReactivity` no longer uses a fixed dBFS floor. It runs a 2.5-second calibration on startup (and on demand) then continuously follows the ambient noise level, so the meter self-tunes to any venue without manual adjustment.
+- **VU Meter profiles** — Meter mode gains three signal-weighting profiles: **RMS** (average loudness), **Hybrid** (balanced), and **Peak** (instant transients). Tap the new "Profile" button to cycle through them; the selection persists across sessions and is saved in scene bundles.
+- **Recalibrate Mic** — A new "Recalibrate Mic" button appears in the control panel when Meter mode is active. Tapping it triggers a fresh 2.5-second calibration pass so the adaptive floor can re-anchor to the current room noise.
+- **Rainbow mode visual overhaul** — Rainbow mode now features a mirrored-tile disco ball with 7 expanding ROYGBIV ring animations and blinking spectral accent dots for a more dynamic, concert-ready look.
+- **Scene bundles include meter profile** — The active VU Meter profile (`meterPeakBlend`) is now saved and restored as part of scene bundles.
+- **Reduced lock gesture delay** — The long-press duration to trigger screen lock has been lowered for faster, more reliable activation in crowded venues.
+
+### New in Version 1.0.7
+- **Marquee in Rainbow mode** — Wave marquee now displays in Rainbow mode with color cycling for additional visual variety.
+- **MarqueeText rendering updates** — Enhanced MarqueeText component for improved dot-matrix animation performance and consistency.
+- **Platform-specific AdMob configuration** — Corrected banner Ad Unit IDs by platform to ensure proper ad serving on iOS and Android.
+- **Bundle QR code sharing fixes** — Improved reliability of the bundle sharing flow via QR code to prevent payload corruption and ensure smooth scene transfer across devices.
+
+### New in v1.0.6
+- **Deep linking support** — Added app deep linking flows (including Android app links) so Concert Light Sync can open directly to in-app destinations from shared URLs.
+- **Bundle sharing reliability improvements** — Fixed edge cases in the bundle share/import flow to make sharing current scenes more dependable across devices.
+- **Disco Ball and canvas visual refinements** — Updated the 3D Disco Ball and main light canvas rendering for smoother visuals and more consistent real-time behavior.
+- **Audio reactivity tuning** — Improved microphone-reactive signal handling so visual responses feel cleaner and more stable in loud venue conditions.
+- **UI polish and navigation cleanup** — Refined side drawer/about surfaces and removed non-essential on-screen status clutter for a cleaner live-use experience.
+- **Expanded curated bundles** — Added two new curated bundles to the library so users can apply ready-made looks faster.
+
+### New in v1.0.5
+- **Production release pipeline hardening** — Added platform-specific store build pipelines that enforce a strict order: local native release compile -> version sync -> compliance validation -> EAS cloud build.
+- **Store submission split by platform** — Added dedicated submission flows for App Store and Google Play so submit operations remain explicit and independently runnable.
+- **Automated compliance gate** — Added `scripts/pre-submit-check.js` and integrated it into build/submit scripts. It validates version alignment, iOS permission strings, AdMob app IDs, Android minification settings, Android package/version/permissions, and privacy policy presence before upload.
+- **Android native build stability fix** — Updated Android release compile flow to clear stale `.cxx`/autolinking artifacts and run `:app:generateCodegenArtifactsFromSchema` before `:app:assembleRelease`, resolving Ninja/CMake codegen directory failures.
+- **Release docs overhaul** — Replaced deployment transcript docs with a structured release playbook in `README_DEPLOYMENT.md`, and added a Release Day checklist in this README for quick execution.
+- **Script compatibility aliases preserved** — Kept `build:ios`, `build:android`, `submit:ios`, and `submit:android` mapped to new store-oriented commands to avoid breaking existing workflows.
+
+### New in v1.0.4
+- **Beat intelligence (onset detection)** — visuals now react to detected beat transients, not only raw loudness.
+- **Beat controls** — Beat Accent slider + Beat On/Off toggle in the control panel, with AsyncStorage persistence.
+- **Scene bundles** — save your complete setup (mode, color, brightness, sensitivity, beat settings, marquee settings, icon/glyph state) as reusable bundles.
+- **Bundle Library** — dedicated screen to apply/delete saved bundles and browse curated packs.
+- **Curated packs** — built-in bundles (Neon Surge, Sunset Chant, Ultra Violet) can be applied instantly or added to your personal bundle library.
+- **Bundle transfer** — QR screen now supports bundle payload sharing and paste-based bundle import.
+- **Immediate import refresh** — imported bundles appear in the library without requiring an app restart.
 
 ### New in v1.0.3
 - **Disco Ball mode** — full 3D WebGL disco ball powered by Three.js (`components/DiscoBall.jsx`): rotating mirrored tiles, 8 colored spotlight beams, atmospheric fog, drag-to-tilt camera, spin/lights toggles, and audio-reactive glow
@@ -73,6 +156,7 @@ Concert Light Sync was built for one purpose: making live music more immersive. 
 
 ### Navigation & Screens
 - **Hamburger drawer** — Slides in from the left via a Reanimated spring; links to About, Tutorials, Privacy Policy, and Share
+- **Bundle Library screen** — Manage saved bundles and curated packs with apply/delete/add actions
 - **About screen** — App info with logo, version, developer, website, and support email
 - **Privacy Policy screen** — WebView loading CDN-hosted HTML with loading indicator and error/retry state
 - **Tutorials screen** — Scrollable glassmorphism cards covering every feature
@@ -102,6 +186,7 @@ Concert Light Sync was built for one purpose: making live music more immersive. 
 | Gestures | react-native-gesture-handler | ~2.28.0 |
 | Audio | expo-audio | ~1.1.1 |
 | Haptics | expo-haptics | ~15.0.8 |
+| Sensors | expo-sensors | SDK 54 |
 | Gradients | expo-linear-gradient | ~15.0.8 |
 | Worklets | react-native-worklets | ^0.5.1 |
 | Navigation | @react-navigation/native-stack | ^7.14.4 |
@@ -212,6 +297,11 @@ The app requests **microphone access** on first launch. Audio reactivity require
 ### Strobe Mode
 Selecting Strobe shows a photosensitivity warning. You must confirm before the mode activates. Frequency is hard-capped at 6Hz for safety.
 
+### Runtime Warnings (Three.js / Expo GL)
+- `THREE.Clock` deprecation warnings are resolved in current code by using an internal monotonic timer in `components/DiscoBall.jsx`.
+- `EXGL: gl.pixelStorei() doesn't support this parameter yet!` comes from Expo GL native internals, not app code.
+- In this project's current Disco Ball scene (no external texture upload path), this EXGL warning is non-blocking and can be safely ignored.
+
 ---
 
 ## Configuration
@@ -223,7 +313,7 @@ Key settings in `app.json`:
   "expo": {
     "name": "Concert Light Sync",
     "slug": "concert-light-sync",
-    "version": "1.0.3",
+    "version": "1.0.9",
     "orientation": "portrait",
     "newArchEnabled": true,
     "ios": {
@@ -264,6 +354,25 @@ Audio polls at 20Hz. If the level were stored in React state, every update would
 
 ### Gesture composition
 The root gesture is a `Composed` gesture wrapping a `LongPress` and a `Pan`. This lets both gestures coexist: a slow pan triggers swipe mode cycling, while a long stationary press triggers screen lock — without conflict.
+
+---
+
+## Release Day Checklist
+
+Use the full deployment playbook in [README_DEPLOYMENT.md](README_DEPLOYMENT.md).
+
+Quick release sequence:
+
+1. `npm run build:ios:store`
+2. `npm run submit:ios:store`
+3. `npm run build:android:store`
+4. `npm run submit:android:store`
+
+Minimum pre-submit gates:
+
+- `npm run pre-submit-check` passes.
+- App Store Connect metadata and privacy details are complete.
+- Google Play Data safety, content rating, ads disclosure, and policy fields are complete.
 
 ---
 
